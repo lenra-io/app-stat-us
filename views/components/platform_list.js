@@ -27,7 +27,7 @@ function platform_list(data, props) {
     if (props && props.add) children.push(card("+", ui.color.grey, null, {
         action: "pushState",
         props: {
-            page: "new_platform"
+            page: "edit_platform"
         }
     }));
     return {
