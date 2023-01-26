@@ -1,6 +1,5 @@
 'use strict'
 
-const lenraDocumentService = require('./api');
 const Platform = require('../classes/Platform');
 const { getDoc } = require('./api');
 const collection = 'platforms';

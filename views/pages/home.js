@@ -1,5 +1,7 @@
 'use strict'
 
+const platformService = require('../../services/platformService.js');
+
 const pagination = 5;
 
 /**
@@ -18,10 +20,8 @@ function content(_data, { state }) {
             {
                 type: "view",
                 name: "platform_list",
-                // "coll": "counter",
-                // "query": {
-                //     "user": "@me"
-                // },
+                coll: platformService.collection,
+                query: {},
                 props: { add: true }
             },
             {

@@ -1,10 +1,8 @@
 const navigationService = require('../../services/navigationService.js');
+const platformService = require('../../services/platformService.js');
 const ui = require('../utils/ui.js')
 
 function post_list(posts, props) {
-    posts = [
-        {}
-    ]
     const limit = props.limit || props.pagination;
     let filteredPosts = posts
     // .sort((a, b) => a - b);
@@ -86,10 +84,10 @@ function post_card([post], props) {
                             {
                                 "type": "view",
                                 "name": "platform_card",
-                                // "coll": "platforms",
-                                // "query": {
-                                //     "_id": "post.platform"
-                                // },
+                                "coll": platformService.collection,
+                                "query": {
+                                    "_id": "post.platform"
+                                },
                                 props: {
                                     size: 24,
                                     boxShadow: {}

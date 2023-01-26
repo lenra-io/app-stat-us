@@ -1,5 +1,6 @@
 const navigationService = require('../../services/navigationService.js');
 const ui = require('../utils/ui.js')
+const platformService = require('../../services/platformService.js');
 
 function menu(data, props) {
     const children = [{
@@ -93,32 +94,18 @@ function fillViewPageName(state, view) {
         case 'home':
             return fillViewText(view, 'Stat Us');
         case 'platform':
-            if (view.type == "button") {
-                return {
-                    type: "view",
-                    name: "platform_title",
-                    // coll: navigationService.collection,
-                    // query: {
-                    //     user: platform._id
-                    // },
-                    props: {
-                        onPressed: view.onPressed
-                    }
-                };
-            }
-            else {
-                return {
-                    type: "view",
-                    name: "platform_title",
-                    // coll: navigationService.collection,
-                    // query: {
-                    //     user: platform._id
-                    // },
-                    props: {
-                        onPressed: null
-                    }
-                };
-            }
+            return {
+                type: "view",
+                name: "platform_title",
+                coll: platformService.collection,
+                query: {
+                    _id: state.platform
+                },
+                props: {
+                    padding: ui.padding.symmetric(16, 8),
+                    onPressed: view.type == "button" ? view.onPressed : null
+                }
+            };
         default:
             console.error(`Not managed page ${state.page}`);
             return fillViewText(view, state.page);

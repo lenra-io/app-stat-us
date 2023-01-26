@@ -1,5 +1,6 @@
 'use strict'
 
+const platformService = require('../../services/platformService.js');
 const { firstProperty } = require("../utils/data");
 const ui = require("../utils/ui");
 
@@ -14,12 +15,12 @@ function content(_data, props) {
         name: 'edit_platform_form',
         props
     };
-    // if (props.state.platform) {
-    //     child.coll = navigationService.collection;
-    //     child.query = {
-    //         user: platform._id
-    //     };
-    // }
+    if (props.state.platform) {
+        child.coll = platformService.collection;
+        child.query = {
+            _id: props.state.platform
+        };
+    }
     return child;
 }
 
@@ -89,8 +90,31 @@ function form([platform], { state }) {
                         }
                     }
                 },
+                {
+                    type: "textfield",
+                    value: firstProperty("account", "", state, platform),
+                    style: {
+                        decoration: {
+                            labelText: "Platform account name",
+                            helperText: "if needed"
+                        },
+                    },
+                    onChanged: {
+                        action: "setStateProperty",
+                        props: {
+                            property: "account"
+                        }
+                    }
+                },
                 ...["views", "shared", "likes", "comments", "clics", "visits"]
-                    .map(property => booleanField(property, state, platform))
+                    .map(property => booleanField(property, state, platform)),
+                {
+                    type: "button",
+                    text: "Save",
+                    onPressed: {
+                        action: "savePlatform"
+                    }
+                }
             ]
         }
     }

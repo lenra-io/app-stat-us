@@ -63,7 +63,7 @@ const color = {
         if (!Number.isInteger(color)) return undefined;
         let hex = (0x00FFFFFF & color).toString(16);
         while (hex.length < 6) hex = "0" + hex;
-        return hex;
+        return "#" + hex;
     }
 };
 

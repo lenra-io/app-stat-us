@@ -1,5 +1,6 @@
 const Platform = require('../classes/Platform.js');
 const { updateDoc, createDoc } = require('../services/api.js');
+const { popState } = require('../services/navigationService.js');
 const navigationService = require('../services/navigationService.js');
 const { getNavigation } = navigationService;
 const platformService = require('../services/platformService.js');
@@ -35,7 +36,9 @@ async function savePlatform(props, event, api) {
     else if (!urlRegex.test(platform.url)) errors.push({ field: "url", message: "The platform name must contain at least 3 characters" });
     if (errors.length == 0) {
         // save or update
-        platform = await ((platform._id) ? updateDoc : createDoc).call(null, api, platformService.collection, platform);
+        const isUpdate = !!platform._id;
+        platform = await (isUpdate ? updateDoc : createDoc).call(null, api, platformService.collection, platform);
+        if (isUpdate) return popState(api, navigation);
         return updateDoc(api, navigationService.collection, {
             ...navigation,
             state: {

@@ -1,4 +1,5 @@
-const navigationService = require('../../services/navigationService.js');
+const Platform = require('../../classes/Platform.js');
+const platformService = require('../../services/platformService.js');
 const ui = require('../utils/ui.js')
 
 const defaultBoxShadow = {
@@ -10,18 +11,15 @@ const defaultBoxShadow = {
     color: ui.color.opacity(ui.color.black, 0.7)
 };
 
-function platform_list(data, props) {
-    let platforms = [
-        {}
-    ];
+function platform_list(platforms, props) {
     let children = platforms.map(platform => {
         return {
             type: "view",
             name: "platform_card",
-            // coll: navigationService.collection,
-            // query: {
-            //     user: platform._id
-            // }
+            coll: platformService.collection,
+            query: {
+                _id: platform._id
+            }
         }
     });
     if (props && props.add) children.push(card("+", ui.color.grey, {}, {
@@ -33,41 +31,50 @@ function platform_list(data, props) {
     return {
         type: "flex",
         spacing: 16,
-        mainAxisAlignment: "start",
+        mainAxisAlignment: "center",
+        padding: ui.padding.all(16),
+        fillParent: true,
         scroll: true,
         children
     }
 }
 
-function platform_card(data, props) {
-    return card("Twitter", ui.color.blue, props, props.onPressed || {
+/**
+ * 
+ * @param {Platform[]} param0 
+ * @param {*} props 
+ * @returns 
+ */
+function platform_card([platform], props) {
+    return card(platform.name, platform.color, props, props.onPressed || {
         action: "pushState",
         props: {
             page: "platform",
-            // platform: platform._id
+            platform: platform._id
         }
     });
 }
 
-function platform_title(data, props) {
-    let platform = {
-        name: "Twitter"
-    }
-    console.log(props);
+function platform_title([platform], props) {
     const onPressed = "onPressed" in props ? props.onPressed : {
         action: "pushState",
         props: {
             page: "platform",
-            // platform: platform._id
+            platform: platform._id
         }
     }
     let child = {
         type: "flex",
         spacing: 8,
+        padding: props.padding,
         children: [
             {
-                "type": "view",
-                "name": "platform_card",
+                type: "view",
+                name: "platform_card",
+                coll: platformService.collection,
+                query: {
+                    _id: platform._id
+                },
                 props: {
                     size: props.size || 24,
                     boxShadow: {},
