@@ -25,3 +25,6 @@ generator:
       - "!/resources/"
       - "!/services/"
       - "!/views/"
+dev:
+  mongo:
+    tag: 4

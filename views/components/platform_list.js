@@ -54,38 +54,42 @@ function platform_title(data, props) {
         name: "Twitter"
     }
     console.log(props);
-    const onPressed = "onPressed" in props ? props.onPressed || undefined : {
+    const onPressed = "onPressed" in props ? props.onPressed : {
         action: "pushState",
         props: {
             page: "platform",
             // platform: platform._id
         }
     }
-    return {
-        type: "actionable",
-        child: {
-            type: "flex",
-            spacing: 16,
-            children: [
-                {
-                    "type": "view",
-                    "name": "platform_card",
-                    props: {
-                        size: props.size || 24,
-                        boxShadow: {},
+    let child = {
+        type: "flex",
+        spacing: 8,
+        children: [
+            {
+                "type": "view",
+                "name": "platform_card",
+                props: {
+                    size: props.size || 24,
+                    boxShadow: {},
 
-                    }
-                }, {
-                    type: "text",
-                    style: {
-                        fontSize: 16
-                    },
-                    value: platform.name
                 }
-            ]
-        },
-        onPressed
+            }, {
+                type: "text",
+                style: {
+                    fontSize: 16
+                },
+                value: platform.name
+            }
+        ]
     };
+    if (onPressed) {
+        child = {
+            type: "actionable",
+            child,
+            onPressed
+        };
+    }
+    return child;
 }
 
 function card(name, color, style, onPressed) {

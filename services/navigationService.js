@@ -40,7 +40,9 @@ module.exports = {
     },
     async pushState(api, navigation, state) {
         navigation = navigation || await getNavigation(api);
-        console.log("navigation", navigation);
+        if (state.page==navigation.state.page) {
+            return this.updateState(api, navigation, state);
+        }
         navigation.history.push(navigation.state);
         navigation.state = {
             ...state
@@ -49,7 +51,6 @@ module.exports = {
     },
     async popState(api, navigation, times) {
         navigation = navigation || await getNavigation(api);
-        // TODO: manage editing category
         times = Math.max(1, Math.min(navigation.history.length, times || 1));
         while (times-- > 0)
             navigation.state = navigation.history.pop();
