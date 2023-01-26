@@ -54,6 +54,16 @@ const color = {
         ret -= mask;
         ret += c & color.transparentMask;
         return ret;
+    },
+    fromHex: (colorHex) => {
+        if (!/^#[a-fA-F0-9]{6}$/.test(colorHex)) return undefined;
+        return parseInt(colorHex.substring(1), 16) | 0xFF000000;
+    },
+    toHex: (color) => {
+        if (!Number.isInteger(color)) return undefined;
+        let hex = (0x00FFFFFF & color).toString(16);
+        while (hex.length < 6) hex = "0" + hex;
+        return hex;
     }
 };
 

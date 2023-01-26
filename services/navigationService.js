@@ -1,6 +1,7 @@
 'use strict'
 
 const lenraDocumentService = require('./api');
+const Navigation = require('../classes/Navigation');
 const homeNavigation = {
     state: {
         page: 'home'
@@ -9,6 +10,10 @@ const homeNavigation = {
 };
 const collection = 'navigations';
 
+/**
+ * @param {any} api 
+ * @returns {Promise<Navigation>}
+ */
 async function getNavigation(api) {
     const navs = await lenraDocumentService.executeQuery(api, collection, {
         user: "@me"
@@ -40,7 +45,7 @@ module.exports = {
     },
     async pushState(api, navigation, state) {
         navigation = navigation || await getNavigation(api);
-        if (state.page==navigation.state.page) {
+        if (state.page == navigation.state.page) {
             return this.updateState(api, navigation, state);
         }
         navigation.history.push(navigation.state);

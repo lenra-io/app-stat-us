@@ -1,5 +1,8 @@
 'use strict'
 
+const { firstProperty } = require("../utils/data");
+const ui = require("../utils/ui");
+
 /**
  * @param {*} _data 
  * @param {*} props 
@@ -27,6 +30,8 @@ function content(_data, props) {
  * @returns 
  */
 function form([platform], { state }) {
+    let colorHex = state?.colorHex || ui.color.toHex(platform?.color);
+    let color = ui.color.fromHex(colorHex);
     return {
         type: "container",
         constraints: { maxWidth: 600 },
@@ -39,36 +44,83 @@ function form([platform], { state }) {
             children: [
                 {
                     type: "textfield",
-                    value: state?.name || platform?.name || "",
+                    value: firstProperty("name", "", state, platform),
                     style: {
                         decoration: {
                             labelText: "Platform name"
                         },
                     },
-                    onChanged: { 
+                    onChanged: {
                         action: "setStateProperty",
                         props: {
                             property: "name"
                         }
                     }
                 },
-                // {
-                //     type: "flex",
-                //     spacing: 16,
-                //     mainAxisAlignment: "start",
-                //     crossAxisAlignment: "stretch",
-                //     direction: "vertical",
-                //     children: [
-
-                //     ]
-                // }
+                {
+                    type: "textfield",
+                    value: colorHex || "",
+                    style: {
+                        decoration: {
+                            labelText: "Color",
+                            filled: !!(color),
+                            fillColor: color,
+                        },
+                    },
+                    onChanged: {
+                        action: "setStateProperty",
+                        props: {
+                            property: "colorHex"
+                        }
+                    }
+                },
+                {
+                    type: "textfield",
+                    value: firstProperty("url", "", state, platform),
+                    style: {
+                        decoration: {
+                            labelText: "Page URL"
+                        },
+                    },
+                    onChanged: {
+                        action: "setStateProperty",
+                        props: {
+                            property: "url"
+                        }
+                    }
+                },
+                ...["views", "shared", "likes", "comments", "clics", "visits"]
+                    .map(property => booleanField(property, state, platform))
             ]
         }
     }
 }
 
-function booleanField() {
-
+function booleanField(property, state, platform) {
+    return {
+        type: "flex",
+        spacing: 16,
+        crossAxisAlignment: "center",
+        children: [
+            {
+                type: "flexible",
+                child: {
+                    type: "text",
+                    value: `Manage ${property}`
+                }
+            },
+            {
+                type: "toggle",
+                value: firstProperty(property, false, state, platform),
+                onPressed: {
+                    action: "setStateProperty",
+                    props: {
+                        property
+                    }
+                }
+            },
+        ]
+    }
 }
 
 /**
@@ -76,19 +128,16 @@ function booleanField() {
  * @param {*} props 
  * @returns 
  */
-function menu(_data, _props) {
+function menu(_data, { state }) {
     return {
         type: "view",
         name: "menu",
         props: {
             mainAction: {
                 text: "Save",
-                // onPressed: {
-                //     action: "pushState",
-                //     props: {
-                //         page: "newGame"
-                //     }
-                // }
+                onPressed: {
+                    action: "savePlatform"
+                }
             }
         }
     }
