@@ -1,11 +1,15 @@
 const navigationService = require('../../services/navigationService.js');
 const ui = require('../utils/ui.js')
 
-function post_list(data, props) {
-    let posts = [
+function post_list(posts, props) {
+    posts = [
         {}
-    ];
-    let children = posts.map(platform => {
+    ]
+    const limit = props.limit || props.pagination;
+    let filteredPosts = posts
+    // .sort((a, b) => a - b);
+    if (limit) filteredPosts = filteredPosts.slice(0, limit);
+    let children = filteredPosts.map(platform => {
         return {
             type: "view",
             name: "post_card",
@@ -15,10 +19,17 @@ function post_list(data, props) {
             // }
         }
     });
-    if (props && props.add) children.unshift(card("+", ui.color.grey, {
+    if (props.add) children.unshift(card("+", ui.color.grey, {
         action: "pushState",
         props: {
             page: "new_post"
+        }
+    }));
+    if (props.pagination && limit < posts.length) children.push(card("+", ui.color.grey, {
+        action: "setStateProperty",
+        props: {
+            property: "limit",
+            value: props.limit + 5
         }
     }));
     return {

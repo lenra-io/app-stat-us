@@ -21,17 +21,17 @@ function menu(_data, _props) {
     return {
         type: "view",
         name: "menu",
-        props: {
-            mainAction: {
-                text: "New game",
-                onPressed: {
-                    action: "pushState",
-                    props: {
-                        page: "newGame"
-                    }
-                }
-            }
-        }
+        // props: {
+        //     mainAction: {
+        //         text: "New game",
+        //         onPressed: {
+        //             action: "pushState",
+        //             props: {
+        //                 page: "newGame"
+        //             }
+        //         }
+        //     }
+        // }
     }
 }
 

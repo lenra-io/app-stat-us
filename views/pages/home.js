@@ -1,35 +1,40 @@
 'use strict'
 
+const pagination = 5;
+
 /**
  * @param {*} _data 
  * @param {*} props 
  * @returns 
  */
-function content(_data, _props) {
+function content(_data, { state }) {
     return {
-        "type": "flex",
-        "direction": "vertical",
-        "spacing": 32,
-        "mainAxisAlignment": "spaceEvenly",
-        "crossAxisAlignment": "center",
-        "children": [
+        type: "flex",
+        direction: "vertical",
+        spacing: 32,
+        mainAxisAlignment: "spaceEvenly",
+        crossAxisAlignment: "center",
+        children: [
             {
-                "type": "view",
-                "name": "platform_list",
+                type: "view",
+                name: "platform_list",
                 // "coll": "counter",
                 // "query": {
                 //     "user": "@me"
                 // },
-                "props": { add: true }
+                props: { add: true }
             },
             {
-                "type": "view",
-                "name": "post_list",
+                type: "view",
+                name: "post_list",
                 // "coll": "counter",
                 // "query": {
                 //     "user": "@me"
                 // },
-                "props": { limit: 5 }
+                props: {
+                    limit: state.limit,
+                    pagination
+                }
             }
         ]
     }

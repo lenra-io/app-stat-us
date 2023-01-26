@@ -1,14 +1,24 @@
 'use strict'
 
+const pagination = 10;
+
 /**
  * @param {*} _data 
  * @param {*} props 
  * @returns 
  */
-function content(_data, _props) {
+function content(_data, { state }) {
     return {
-        "type": "text",
-        "value": "Platform page"
+        "type": "view",
+        "name": "post_list",
+        // "coll": "counter",
+        // "query": {
+        //     "user": "@me"
+        // },
+        "props": {
+            limit: state.limit,
+            pagination
+        }
     }
 }
 
@@ -17,17 +27,18 @@ function content(_data, _props) {
  * @param {*} props 
  * @returns 
  */
-function menu(_data, _props) {
+function menu(_data, { state }) {
     return {
         type: "view",
         name: "menu",
         props: {
             mainAction: {
-                text: "New game",
+                text: "Edit",
                 onPressed: {
                     action: "pushState",
                     props: {
-                        page: "newGame"
+                        page: "edit_platform",
+                        platform: state.platform
                     }
                 }
             }

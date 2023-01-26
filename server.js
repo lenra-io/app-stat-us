@@ -128,7 +128,7 @@ async function handleAppView(req, res) {
     let { view, data, props } = req.body;
 
     if (Object.keys(viewHandlers).includes(view)) {
-        let possibleFutureRes = viewHandlers[view](data, props)
+        let possibleFutureRes = viewHandlers[view](data || [], props || {})
 
         return Promise.resolve(possibleFutureRes)
             .then(view => {
@@ -161,7 +161,7 @@ async function handleAppListener(req, res) {
         listeners file need to exactly math with action name
     */
     if (Object.keys(listenerHandlers).includes(action)) {
-        let possibleFutureRes = listenerHandlers[action](props, event, api);
+        let possibleFutureRes = listenerHandlers[action](props || {}, event, api);
 
         return Promise.resolve(possibleFutureRes)
             .then(() => {

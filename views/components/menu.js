@@ -92,6 +92,33 @@ function fillViewPageName(state, view) {
     switch (state.page) {
         case 'home':
             return fillViewText(view, 'Stat Us');
+        case 'platform':
+            if (view.type == "button") {
+                return {
+                    type: "view",
+                    name: "platform_title",
+                    // coll: navigationService.collection,
+                    // query: {
+                    //     user: platform._id
+                    // },
+                    props: {
+                        onPressed: view.onPressed
+                    }
+                };
+            }
+            else {
+                return {
+                    type: "view",
+                    name: "platform_title",
+                    // coll: navigationService.collection,
+                    // query: {
+                    //     user: platform._id
+                    // },
+                    props: {
+                        onPressed: null
+                    }
+                };
+            }
         default:
             console.error(`Not managed page ${state.page}`);
             return fillViewText(view, state.page);

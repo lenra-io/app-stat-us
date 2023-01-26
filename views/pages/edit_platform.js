@@ -23,13 +23,13 @@ function menu(_data, _props) {
         name: "menu",
         props: {
             mainAction: {
-                text: "New game",
-                onPressed: {
-                    action: "pushState",
-                    props: {
-                        page: "newGame"
-                    }
-                }
+                text: "Save",
+                // onPressed: {
+                //     action: "pushState",
+                //     props: {
+                //         page: "newGame"
+                //     }
+                // }
             }
         }
     }

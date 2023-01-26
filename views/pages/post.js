@@ -17,17 +17,18 @@ function content(_data, _props) {
  * @param {*} props 
  * @returns 
  */
-function menu(_data, _props) {
+function menu(_data, {state}) {
     return {
         type: "view",
         name: "menu",
         props: {
             mainAction: {
-                text: "New game",
+                text: "Add stats",
                 onPressed: {
                     action: "pushState",
                     props: {
-                        page: "newGame"
+                        page: "new_post_stats",
+                        post: state.post
                     }
                 }
             }
