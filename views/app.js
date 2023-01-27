@@ -19,7 +19,6 @@ module.exports = (navigations, _props) => {
     type: "flex",
     direction: "vertical",
     scroll: true,
-    spacing: 32,
     crossAxisAlignment: "center",
     children: [
       {
@@ -30,10 +29,14 @@ module.exports = (navigations, _props) => {
         }
       },
       {
-        type: "view",
-        name: `${navigation.state.page}_content`,
-        props: {
-          state: navigation.state
+        type: "container",
+        padding: ui.padding.all(32),
+        child: {
+          type: "view",
+          name: `${navigation.state.page}_content`,
+          props: {
+            state: navigation.state
+          }
         }
       }
     ]

@@ -1,6 +1,6 @@
+const Platform = require('../../classes/Platform.js');
 const navigationService = require('../../services/navigationService.js');
-const ui = require('../utils/ui.js')
-const platformService = require('../../services/platformService.js');
+const ui = require('../utils/ui.js');
 
 function menu(data, props) {
     const children = [{
@@ -46,8 +46,16 @@ function menu(data, props) {
  * @param {*} _props 
  * @returns 
  */
-function ariane(navs, _props) {
-    const navigation = navs[0];
+function ariane([navigation], _props) {
+    if (navigation.history.length == 0) {
+        return fillViewPageName(navigation.state, {
+            type: "text",
+            style: {
+                fontWeight: "bold",
+                fontSize: 24
+            },
+        });
+    }
     return {
         type: "flex",
         crossAxisAlignment: "center",
@@ -97,7 +105,7 @@ function fillViewPageName(state, view) {
             return {
                 type: "view",
                 name: "platform_title",
-                coll: platformService.collection,
+                coll: Platform.collection,
                 query: {
                     _id: state.platform
                 },
@@ -106,6 +114,10 @@ function fillViewPageName(state, view) {
                     onPressed: view.type == "button" ? view.onPressed : null
                 }
             };
+        case 'edit_platform':
+            return fillViewText(view, state.platform ? 'Edit' : 'Create platform');
+        case 'edit_post':
+            return fillViewText(view, 'New post');
         default:
             console.error(`Not managed page ${state.page}`);
             return fillViewText(view, state.page);

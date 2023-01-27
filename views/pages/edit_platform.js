@@ -1,6 +1,6 @@
 'use strict'
 
-const platformService = require('../../services/platformService.js');
+const Platform = require("../../classes/Platform");
 const { firstProperty } = require("../utils/data");
 const ui = require("../utils/ui");
 
@@ -16,7 +16,7 @@ function content(_data, props) {
         props
     };
     if (props.state.platform) {
-        child.coll = platformService.collection;
+        child.coll = Platform.collection;
         child.query = {
             _id: props.state.platform
         };
@@ -66,6 +66,7 @@ function form([platform], { state }) {
                             labelText: "Color",
                             filled: !!(color),
                             fillColor: color,
+                            helperText: "Hex format: #FF0000 for red",
                         },
                     },
                     onChanged: {
@@ -80,7 +81,8 @@ function form([platform], { state }) {
                     value: firstProperty("url", "", state, platform),
                     style: {
                         decoration: {
-                            labelText: "Page URL"
+                            labelText: "Page URL",
+                            helperText: "Full url: https://www.lenra.io"
                         },
                     },
                     onChanged: {

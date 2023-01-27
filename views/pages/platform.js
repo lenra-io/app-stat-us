@@ -1,5 +1,7 @@
 'use strict'
 
+const Post = require("../../classes/Post");
+
 const pagination = 10;
 
 /**
@@ -9,13 +11,13 @@ const pagination = 10;
  */
 function content(_data, { state }) {
     return {
-        "type": "view",
-        "name": "post_list",
-        // "coll": "counter",
-        // "query": {
-        //     "user": "@me"
-        // },
-        "props": {
+        type: "view",
+        name: "post_list",
+        coll: Post.collection,
+        query: {
+            platform: state.platform
+        },
+        props: {
             limit: state.limit,
             pagination
         }

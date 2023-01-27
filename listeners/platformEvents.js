@@ -1,16 +1,15 @@
 const Platform = require('../classes/Platform.js');
-const { updateDoc, createDoc } = require('../services/api.js');
+const { updateDoc, createDoc, getDoc } = require('../services/api.js');
 const { popState } = require('../services/navigationService.js');
 const navigationService = require('../services/navigationService.js');
 const { getNavigation } = navigationService;
-const platformService = require('../services/platformService.js');
 const ui = require('../views/utils/ui.js');
 
 const urlRegex = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
 
 async function savePlatform(props, event, api) {
     const navigation = await getNavigation(api);
-    let platform = navigation.state?.platform ? await platformService.get(api, navigation.state.platform) : new Platform();
+    let platform = navigation.state?.platform ? await getDoc(api, Platform.collection, navigation.state.platform) : new Platform();
     const errors = [];
     // update fields
     for (const key in platform) {
@@ -37,7 +36,7 @@ async function savePlatform(props, event, api) {
     if (errors.length == 0) {
         // save or update
         const isUpdate = !!platform._id;
-        platform = await (isUpdate ? updateDoc : createDoc).call(null, api, platformService.collection, platform);
+        platform = await (isUpdate ? updateDoc : createDoc).call(null, api, Platform.collection, platform);
         if (isUpdate) return popState(api, navigation);
         return updateDoc(api, navigationService.collection, {
             ...navigation,

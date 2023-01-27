@@ -3,4 +3,5 @@ module.exports = {
     ...require("./lifecycleEvents"),
     ...require("./navigationEvents"),
     ...require("./platformEvents"),
+    ...require("./postEvents"),
 }

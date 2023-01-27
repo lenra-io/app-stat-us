@@ -1,5 +1,5 @@
+const Platform = require('../../classes/Platform.js');
 const navigationService = require('../../services/navigationService.js');
-const platformService = require('../../services/platformService.js');
 const ui = require('../utils/ui.js')
 
 function post_list(posts, props) {
@@ -11,18 +11,18 @@ function post_list(posts, props) {
         return {
             type: "view",
             name: "post_card",
-            // coll: navigationService.collection,
-            // query: {
-            //     user: platform._id
-            // }
+            coll: navigationService.collection,
+            query: {
+                user: platform._id
+            }
         }
     });
-    if (props.add) children.unshift(card("+", ui.color.grey, {
-        action: "pushState",
-        props: {
-            page: "new_post"
-        }
-    }));
+    // if (props.add) children.unshift(card("+", ui.color.grey, {
+    //     action: "pushState",
+    //     props: {
+    //         page: "edit_post"
+    //     }
+    // }));
     if (props.pagination && limit < posts.length) children.push(card("+", ui.color.grey, {
         action: "setStateProperty",
         props: {
@@ -84,7 +84,7 @@ function post_card([post], props) {
                             {
                                 "type": "view",
                                 "name": "platform_card",
-                                "coll": platformService.collection,
+                                "coll": Platform.collection,
                                 "query": {
                                     "_id": "post.platform"
                                 },

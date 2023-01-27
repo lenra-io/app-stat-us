@@ -1,4 +1,5 @@
 const Document = require('./Document.js');
+const collection = 'platforms';
 
 module.exports = class Platform extends Document {
     /**
@@ -26,5 +27,9 @@ module.exports = class Platform extends Document {
         this.comments = comments;
         this.clics = clics;
         this.visits = visits;
+    }
+
+    static get collection() {
+        return collection;
     }
 }
