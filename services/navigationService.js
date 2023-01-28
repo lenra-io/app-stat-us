@@ -23,6 +23,7 @@ async function getNavigation(api) {
 
 module.exports = {
     collection,
+    homeNavigation,
     getNavigation,
     async home(api) {
         let navigation = await getNavigation(api);

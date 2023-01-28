@@ -1,4 +1,5 @@
 const Platform = require('../../classes/Platform.js');
+const { homeNavigation } = require('../../services/navigationService.js');
 const ui = require('../utils/ui.js')
 
 const defaultBoxShadow = {
@@ -10,16 +11,65 @@ const defaultBoxShadow = {
     color: ui.color.opacity(ui.color.black, 0.7)
 };
 
+/**
+ * 
+ * @param {Platform[]} platforms 
+ * @param {*} props 
+ * @returns 
+ */
 function platform_list(platforms, props) {
     let children = platforms.map(platform => {
-        return {
-            type: "view",
-            name: "platform_card",
-            coll: Platform.collection,
-            query: {
-                _id: platform._id
-            }
+        const children = [
+            {
+                type: "view",
+                name: "platform_card",
+                coll: Platform.collection,
+                query: {
+                    _id: platform._id
+                }
+            },
+            {
+                type: "container",
+                padding: { top: 16 },
+                child: {
+                    type: "text",
+                    value: platform.name,
+                    textAlign: "center",
+                },
+            },
+        ];
+        if (platform.account) {
+            children.push({
+                type: "text",
+                value: `@${platform.account}`,
+                textAlign: "center",
+                style: {
+                    fontSize: 12,
+                }
+            });
         }
+        // {
+        //     type: "view",
+        //     name: "updateStatus",
+        //     coll: PostStat.collection,
+        //     query: {
+        //         post: post._id
+        //     },
+        //     props: {
+        //         date: post.date,
+        //     }
+        // }
+        return {
+            type: "container",
+            constraints: { maxWidth: 64 },
+            child: {
+                type: "flex",
+                mainAxisAlignment: "start",
+                crossAxisAlignment: "stretch",
+                direction: "vertical",
+                children
+            }
+        };
     });
     if (props && props.add) children.push(card("+", ui.color.grey, {}, {
         action: "pushState",
@@ -45,7 +95,7 @@ function platform_list(platforms, props) {
  * @returns 
  */
 function platform_selector(platforms, props) {
-    const current = platforms.find(p => p._id==props.platform)
+    const current = platforms.find(p => p._id == props.platform)
     let children = platforms.map(platform => {
         return {
             type: "menuItem",
@@ -94,23 +144,12 @@ function platformName(platform) {
  * @returns 
  */
 function platform_card([platform], props) {
-    return card(platform.name, platform.color, props, props.onPressed || {
-        action: "pushState",
-        props: {
-            page: "platform",
-            platform: platform._id
-        }
-    });
+    const onPressed = "onPressed" in props ? props.onPressed : navigateToPlatformListener(platform._id);
+    return card(platform.name, platform.color, props, onPressed);
 }
 
 function platform_title([platform], props) {
-    const onPressed = "onPressed" in props ? props.onPressed : {
-        action: "pushState",
-        props: {
-            page: "platform",
-            platform: platform._id
-        }
-    };
+    const onPressed = "onPressed" in props ? props.onPressed : navigateToPlatformListener(platform._id);
     const size = props.size || 24;
     let child = {
         type: "flex",
@@ -182,9 +221,28 @@ function card(name, color, style, onPressed) {
     return child;
 }
 
+function navigateToPlatformListener(platformId) {
+    return {
+        action: "replaceNavigation",
+        props: platformNavigation(platformId),
+    }
+}
+
+function platformNavigation(platformId) {
+    // Deep copy
+    const navigation = JSON.parse(JSON.stringify(homeNavigation));
+    navigation.history.push(navigation.state);
+    navigation.state = {
+        page: "platform",
+        platform: platformId
+    }
+    return navigation;
+}
+
 module.exports = {
     platform_list,
     platform_selector,
     platform_card,
     platform_title,
+    platformNavigation,
 }

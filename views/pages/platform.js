@@ -3,7 +3,7 @@
 const Platform = require("../../classes/Platform");
 const Post = require("../../classes/Post");
 
-const pagination = 10;
+const pagination = 5;
 
 /**
  * @param {*} _data 

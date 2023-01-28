@@ -11,6 +11,7 @@ const pagination = 5;
  * @returns 
  */
 function content(_data, { state }) {
+    console.log("state", state);
     return {
         type: "flex",
         direction: "vertical",

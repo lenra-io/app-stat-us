@@ -7,6 +7,31 @@ const { urlRegex } = require('../views/utils/data.js');
 const { getNavigation } = navigationService;
 const ui = require('../views/utils/ui.js');
 
+async function updatePlatform(props, event, api) {
+    const navigation = await getNavigation(api);
+    const platform = await getDoc(api, Platform.collection, navigation.state.platform);
+    const errors = [];
+    if (props.property == "colorHex") {
+        const color = ui.color.fromHex(navigation.state.colorHex);
+        if (color)
+            platform.color = color;
+        else {
+            errors.push({ field: "color", message: "The value is not a valid color" });
+        }
+    }
+    else {
+        platform[props.property] = event.value || props.value;
+    }
+    if (errors.length == 0) {
+        return updateDoc(api, Platform.collection, platform);
+    }
+    else {
+        return updateState(api, navigation, {
+            errors
+        });
+    }
+}
+
 async function savePlatform(props, event, api) {
     const navigation = await getNavigation(api);
     let platform = navigation.state?.platform ? await getDoc(api, Platform.collection, navigation.state.platform) : new Platform();
@@ -53,5 +78,6 @@ async function savePlatform(props, event, api) {
 }
 
 module.exports = {
-    savePlatform
+    updatePlatform,
+    savePlatform,
 }

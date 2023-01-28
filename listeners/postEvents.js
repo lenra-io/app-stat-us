@@ -1,8 +1,9 @@
 const Post = require('../classes/Post.js');
 const PostStat = require('../classes/PostStat.js');
 const { updateDoc, createDoc, getDoc } = require('../services/api.js');
-const { popState, updateState, replaceState } = require('../services/navigationService.js');
+const { popState, updateState, replaceState, replaceNavigation } = require('../services/navigationService.js');
 const navigationService = require('../services/navigationService.js');
+const { postNavigation } = require('../views/components/post_list.js');
 const { urlRegex, dateRegex, timeRegex } = require('../views/utils/data.js');
 const { getNavigation } = navigationService;
 const ui = require('../views/utils/ui.js');
@@ -36,12 +37,7 @@ async function savePost(_props, event, api) {
         // save or update
         const isUpdate = !!post._id;
         post = await (isUpdate ? updateDoc : createDoc).call(null, api, Post.collection, post);
-        if (isUpdate) return popState(api, navigation);
-        return replaceState(api, navigation, {
-            page: "post",
-            post: post._id,
-            platform: post.platform,
-        });
+        return replaceNavigation(api, navigation, postNavigation(post.platform, post._id));
     }
     else {
         return updateState(api, navigation, {
@@ -79,8 +75,8 @@ async function savePostStat(_props, event, api) {
     if (!timeValid) errors.push({ field: "time", message: "The time format is not correct" });
     if (errors.length == 0) {
         // save or update
-        postStat = await createDoc.call(null, api, PostStat.collection, postStat);
-        return popState(api, navigation);
+        postStat = await createDoc(api, PostStat.collection, postStat);
+        return replaceNavigation(api, navigation, postNavigation(navigation.state.platform, navigation.state.post));
     }
     else {
         return updateState(api, navigation, {

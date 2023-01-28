@@ -3,6 +3,7 @@ const Post = require('../../classes/Post.js');
 const PostStat = require('../../classes/PostStat.js');
 const navigationService = require('../../services/navigationService.js');
 const ui = require('../utils/ui.js');
+const { platformNavigation } = require('./platform_list.js');
 const { url } = require('./url.js');
 
 /**
@@ -37,13 +38,18 @@ function post_list(posts, props) {
             }
         }
     });
-    if (props.pagination && limit < posts.length) children.push(card("+", ui.color.grey, {
-        action: "setStateProperty",
-        props: {
-            property: "limit",
-            value: props.limit + 5
+    if (props.pagination && limit < posts.length) children.push({
+        type: "button",
+        text: "+",
+        mainStyle: "secondary",
+        onPressed: {
+            action: "setStateProperty",
+            props: {
+                property: "limit",
+                value: limit + 5
+            }
         }
-    }));
+    });
     return {
         type: "flex",
         spacing: 16,
@@ -72,8 +78,6 @@ function post_card([post], props) {
                 color: 0xFFDCE0E7
             }),
             decoration: {
-                // TODO: a color to update a post
-                // color: currentPlayer._id != props.game.lastPlayer ? ui.color.blue : ui.color.white,
                 color: ui.color.white,
                 borderRadius: ui.borderRadius.all(8),
                 boxShadow: {
@@ -110,13 +114,28 @@ function post_card([post], props) {
                                     size: 24,
                                     boxShadow: {}
                                 }
-                            }, {
-                                type: "text",
-                                style: {
-                                    fontSize: 16,
-                                    fontWeight: "bold",
+                            },
+                            {
+                                type: "flexible",
+                                child: {
+                                    type: "text",
+                                    style: {
+                                        fontSize: 16,
+                                        fontWeight: "bold",
+                                    },
+                                    value: name
+                                }
+                            },
+                            {
+                                type: "view",
+                                name: "updateStatus",
+                                coll: PostStat.collection,
+                                query: {
+                                    post: post._id
                                 },
-                                value: name
+                                props: {
+                                    date: post.date,
+                                }
                             }
                         ]
                     },
@@ -136,14 +155,7 @@ function post_card([post], props) {
                 ]
             }
         },
-        onPressed: {
-            action: "pushState",
-            props: {
-                page: "post",
-                post: post._id,
-                platform: post.platform,
-            }
-        }
+        onPressed: navigateToPostListener(post.platform, post._id),
     };
 }
 
@@ -169,8 +181,28 @@ function post_title([post], props) {
     return child;
 }
 
+function navigateToPostListener(platformId, postId) {
+    return {
+        action: "replaceNavigation",
+        props: postNavigation(platformId, postId),
+    }
+}
+
+function postNavigation(platformId, postId) {
+    // Deep copy
+    const navigation = platformNavigation(platformId);
+    navigation.history.push(navigation.state);
+    navigation.state = {
+        page: "post",
+        platform: platformId,
+        post: postId,
+    }
+    return navigation;
+}
+
 module.exports = {
     post_list,
     post_card,
     post_title,
+    postNavigation,
 }

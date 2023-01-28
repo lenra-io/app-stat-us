@@ -1,4 +1,3 @@
-const PostStat = require('../../classes/PostStat.js');
 const ui = require('../utils/ui.js');
 
 /**

@@ -4,4 +4,5 @@ module.exports = {
     ...require("./post_list"),
     ...require("./post_stats"),
     ...require("./url"),
+    ...require("./updateStatus"),
 }
