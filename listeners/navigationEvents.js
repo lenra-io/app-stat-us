@@ -16,6 +16,10 @@ function popState(props, event, api) {
     return navigationService.popState(api, null, props.times);
 }
 
+function replaceState(props, event, api) {
+    return navigationService.replaceState(api, null, props);
+}
+
 function setStateProperty(props, event, api) {
     return navigationService.updateState(api, null, {[props.property]: event.value || props.value});
 }
@@ -33,6 +37,7 @@ module.exports = {
     setPage,
     pushState,
     popState,
+    replaceState,
     setStateProperty,
     openModal,
     closeModal

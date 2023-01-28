@@ -1,6 +1,7 @@
 'use strict'
 
 const Platform = require("../../classes/Platform");
+const PostStat = require("../../classes/PostStat");
 const { firstProperty } = require("../utils/data");
 const ui = require("../utils/ui");
 
@@ -108,7 +109,7 @@ function form([platform], { state }) {
                         }
                     }
                 },
-                ...["views", "shared", "likes", "comments", "clics", "visits"]
+                ...PostStat.fields
                     .map(property => booleanField(property, state, platform)),
                 {
                     type: "button",

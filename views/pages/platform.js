@@ -18,6 +18,7 @@ function content(_data, { state }) {
             platform: state.platform
         },
         props: {
+            add: true,
             limit: state.limit,
             pagination
         }

@@ -31,7 +31,6 @@ function content(_data, { state }) {
                 coll: Post.collection,
                 query: {},
                 props: {
-                    add: true,
                     limit: state.limit,
                     pagination
                 }

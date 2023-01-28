@@ -74,7 +74,6 @@ function betterContrast(color, ...comparedColors) {
         let whiteRatio = luminanceForRatio / 1.05;
         if (blackRatio < 1) blackRatio = 1 / blackRatio;
         if (whiteRatio < 1) whiteRatio = 1 / whiteRatio;
-        console.log("blackRatio", blackRatio, "\n", "whiteRatio", whiteRatio);
         return (blackRatio > whiteRatio) ? colors.black : colors.white;
     }
 
@@ -88,7 +87,6 @@ function betterContrast(color, ...comparedColors) {
         }
     })
         .sort((a, b) => b.ratio - a.ratio);
-    console.log("sortedColors", sortedColors);
     return sortedColors[0].color;
 }
 

@@ -1,28 +1,41 @@
 const Platform = require('../../classes/Platform.js');
+const Post = require('../../classes/Post.js');
+const PostStat = require('../../classes/PostStat.js');
 const navigationService = require('../../services/navigationService.js');
 const ui = require('../utils/ui.js')
 
+/**
+ * 
+ * @param {Post[]} posts 
+ * @param {*} props 
+ * @returns 
+ */
 function post_list(posts, props) {
     const limit = props.limit || props.pagination;
-    let filteredPosts = posts
-    // .sort((a, b) => a - b);
+    let filteredPosts = [...posts]
+        .sort((a, b) => b.date - a.date);
     if (limit) filteredPosts = filteredPosts.slice(0, limit);
-    let children = filteredPosts.map(platform => {
+    let children = filteredPosts.map(post => {
         return {
             type: "view",
             name: "post_card",
-            coll: navigationService.collection,
+            coll: Post.collection,
             query: {
-                user: platform._id
+                _id: post._id
             }
         }
     });
-    // if (props.add) children.unshift(card("+", ui.color.grey, {
-    //     action: "pushState",
-    //     props: {
-    //         page: "edit_post"
-    //     }
-    // }));
+    if (props.add) children.unshift({
+        type: "button",
+        text: "New post",
+        onPressed: {
+            action: "pushState",
+            props: {
+                page: "edit_post",
+                platform: props.platform,
+            }
+        }
+    });
     if (props.pagination && limit < posts.length) children.push(card("+", ui.color.grey, {
         action: "setStateProperty",
         props: {
@@ -44,7 +57,14 @@ function post_list(posts, props) {
     }
 }
 
+/**
+ * 
+ * @param {Post[]} param0 
+ * @param {*} props 
+ * @returns 
+ */
 function post_card([post], props) {
+    console.log("post_card", post);
     return {
         type: "actionable",
         child: {
@@ -82,11 +102,11 @@ function post_card([post], props) {
                         spacing: 16,
                         children: [
                             {
-                                "type": "view",
-                                "name": "platform_card",
-                                "coll": Platform.collection,
-                                "query": {
-                                    "_id": "post.platform"
+                                type: "view",
+                                name: "platform_card",
+                                coll: Platform.collection,
+                                query: {
+                                    _id: post.platform
                                 },
                                 props: {
                                     size: 24,
@@ -97,18 +117,21 @@ function post_card([post], props) {
                                 style: {
                                     fontSize: 16
                                 },
-                                value: "My post subject"
+                                value: post.name
                             }
                         ]
-                    }, {
-                        type: "flex",
-                        spacing: 16,
-                        children: [
-                            {
-                                type: "text",
-                                value: "500 views"
-                            }
-                        ]
+                    },
+                    {
+                        type: "view",
+                        name: "post_stats",
+                        coll: PostStat.collection,
+                        query: {
+                            post: post._id,
+                        },
+                        props: {
+                            limit: 1,
+                            postDate: post.date,
+                        }
                     }
                 ]
             }
@@ -117,13 +140,37 @@ function post_card([post], props) {
             action: "pushState",
             props: {
                 page: "post",
-                // post: post._id
+                post: post._id,
+                platform: post.platform,
             }
         }
     };
 }
 
+function post_title([post], props) {
+    let child = {
+        type: "text",
+        value: post.name
+    };
+    if (props.padding) {
+        child = {
+            type: "container",
+            padding: props.padding,
+            child,
+        };
+    }
+    if (props.onPressed) {
+        child = {
+            type: "actionable",
+            child,
+            onPressed: props.onPressed
+        };
+    }
+    return child;
+}
+
 module.exports = {
     post_list,
-    post_card
+    post_card,
+    post_title,
 }

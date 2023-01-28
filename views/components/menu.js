@@ -1,4 +1,5 @@
 const Platform = require('../../classes/Platform.js');
+const Post = require('../../classes/Post.js');
 const navigationService = require('../../services/navigationService.js');
 const ui = require('../utils/ui.js');
 
@@ -114,10 +115,25 @@ function fillViewPageName(state, view) {
                     onPressed: view.type == "button" ? view.onPressed : null
                 }
             };
+        case 'post':
+            return {
+                type: "view",
+                name: "post_title",
+                coll: Post.collection,
+                query: {
+                    _id: state.post
+                },
+                props: {
+                    padding: ui.padding.symmetric(16, 8),
+                    onPressed: view.type == "button" ? view.onPressed : null
+                }
+            };
         case 'edit_platform':
             return fillViewText(view, state.platform ? 'Edit' : 'Create platform');
         case 'edit_post':
             return fillViewText(view, 'New post');
+        case 'new_post_stats':
+            return fillViewText(view, 'Add stats');
         default:
             console.error(`Not managed page ${state.page}`);
             return fillViewText(view, state.page);

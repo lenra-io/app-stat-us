@@ -130,9 +130,6 @@ function platform_title([platform], props) {
                 }
             }, {
                 type: "text",
-                style: {
-                    fontSize: 16
-                },
                 value: platform.name
             }
         ]

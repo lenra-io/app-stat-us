@@ -35,6 +35,11 @@ module.exports = {
             return lenraDocumentService.updateDoc(api, collection, navigation);
         }
     },
+    async replaceState(api, navigation, newState) {
+        navigation = navigation || await getNavigation(api);
+        navigation.state = newState;
+        return lenraDocumentService.updateDoc(api, collection, navigation);
+    },
     async updateState(api, navigation, stateData) {
         navigation = navigation || await getNavigation(api);
         Object.entries(stateData)
