@@ -30,7 +30,6 @@ function form([platform], _props) {
     const str = date.toISOString();
     const dateStr = str.substring(0, 10);
     const timeStr = str.substring(11, 19);
-    console.log(platform);
     return {
         type: "form",
         onSubmit: {
@@ -47,16 +46,19 @@ function form([platform], _props) {
                 direction: "vertical",
                 children: [
                     ...PostStat.fields
-                        .filter(field => platform[field])
+                        .filter(field => platform[field.name])
                         .map(field => {
-                            const text = field.substring(0, 1).toUpperCase() + field.substring(1);
                             return {
                                 type: "textfield",
-                                name: field,
+                                name: field.name,
                                 value: "",
                                 style: {
                                     decoration: {
-                                        labelText: text,
+                                        labelText: field.displayName,
+                                        icon: {
+                                            type: "icon",
+                                            value: field.icon,
+                                        }
                                     },
                                 }
                             }

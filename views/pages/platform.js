@@ -10,6 +10,7 @@ const pagination = 10;
  * @returns 
  */
 function content(_data, { state }) {
+    // TODO: add platform infos and edit button
     return {
         type: "view",
         name: "post_list",
@@ -20,7 +21,8 @@ function content(_data, { state }) {
         props: {
             add: true,
             limit: state.limit,
-            pagination
+            pagination,
+            platform: state.platform,
         }
     }
 }

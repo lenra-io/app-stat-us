@@ -27,7 +27,6 @@ module.exports = {
     async home(api) {
         let navigation = await getNavigation(api);
         if (!navigation) {
-            console.log("create navigation");
             return lenraDocumentService.createDoc(api, collection, { ...homeNavigation, user: "@me" });
         }
         else {

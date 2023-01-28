@@ -191,7 +191,7 @@ const port = process.env.http_port || 3000;
 
 initManifest().then(() => {
     app.listen(port, () => {
-        console.log(`node12 listening on port: ${port}`)
+        console.log(`App listening on port: ${port}`)
     });
 }).catch(err => {
     console.error(err);

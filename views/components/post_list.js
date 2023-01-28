@@ -64,7 +64,6 @@ function post_list(posts, props) {
  * @returns 
  */
 function post_card([post], props) {
-    console.log("post_card", post);
     return {
         type: "actionable",
         child: {

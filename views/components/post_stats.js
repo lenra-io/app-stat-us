@@ -7,6 +7,7 @@ const ui = require('../utils/ui.js');
  * @returns 
  */
 function post_stats(stats, props) {
+    console.log("post_stats", stats);
     if (stats.length == 0) {
         return {
             type: "text",

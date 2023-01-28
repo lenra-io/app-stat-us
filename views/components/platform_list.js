@@ -148,7 +148,6 @@ function card(name, color, style, onPressed) {
     const size = style.size || 64;
     const boxShadow = "boxShadow" in style ? style.boxShadow : defaultBoxShadow;
     const textColor = ui.color.betterContrast(color);
-    console.log("textColor", textColor);
     let child = {
         type: "container",
         alignment: "center",

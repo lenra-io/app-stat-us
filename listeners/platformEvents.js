@@ -10,17 +10,15 @@ const ui = require('../views/utils/ui.js');
 async function savePlatform(props, event, api) {
     const navigation = await getNavigation(api);
     let platform = navigation.state?.platform ? await getDoc(api, Platform.collection, navigation.state.platform) : new Platform();
-    console.log("savePlatform", platform, navigation.state);
     const errors = [];
     // update fields
     for (const key in platform) {
         if (Object.hasOwnProperty.call(platform, key) && Object.hasOwnProperty.call(navigation.state, key)) {
-            console.log("update", key);
             platform[key] = navigation.state[key];
         }
     }
     PostStat.fields.forEach(field => {
-        if (field in navigation.state) platform[field] = navigation.state[field];
+        if (field.name in navigation.state) platform[field.name] = navigation.state[field.name];
     });
     if ("colorHex" in navigation.state) {
         const color = ui.color.fromHex(navigation.state.colorHex);
@@ -40,7 +38,6 @@ async function savePlatform(props, event, api) {
     if (errors.length == 0) {
         // save or update
         const isUpdate = !!platform._id;
-        console.log("savePlatform", platform);
         platform = await (isUpdate ? updateDoc : createDoc).call(null, api, Platform.collection, platform);
         if (isUpdate) return popState(api, navigation);
         return replaceState(api, navigation, {

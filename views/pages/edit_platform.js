@@ -130,19 +130,23 @@ function booleanField(property, state, platform) {
         crossAxisAlignment: "center",
         children: [
             {
+                type: "icon",
+                value: property.icon,
+            },
+            {
                 type: "flexible",
                 child: {
                     type: "text",
-                    value: `Manage ${property}`
+                    value: property.displayName
                 }
             },
             {
                 type: "toggle",
-                value: firstProperty(property, false, state, platform),
+                value: firstProperty(property.name, false, state, platform),
                 onPressed: {
                     action: "setStateProperty",
                     props: {
-                        property
+                        property: property.name
                     }
                 }
             },
