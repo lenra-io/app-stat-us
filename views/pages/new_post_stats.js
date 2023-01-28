@@ -36,69 +36,66 @@ function form([platform], _props) {
             action: "savePostStat"
         },
         child: {
-            type: "container",
-            constraints: { maxWidth: 600 },
-            child: {
-                type: "flex",
-                spacing: 16,
-                mainAxisAlignment: "start",
-                crossAxisAlignment: "stretch",
-                direction: "vertical",
-                children: [
-                    ...PostStat.fields
-                        .filter(field => platform[field.name])
-                        .map(field => {
-                            return {
-                                type: "textfield",
-                                name: field.name,
-                                value: "",
-                                style: {
-                                    decoration: {
-                                        labelText: field.displayName,
-                                        icon: {
-                                            type: "icon",
-                                            value: field.icon,
-                                        }
-                                    },
-                                }
+            type: "flex",
+            spacing: 16,
+            mainAxisAlignment: "start",
+            crossAxisAlignment: "stretch",
+            direction: "vertical",
+            children: [
+                ...PostStat.fields
+                    .filter(field => platform[field.name])
+                    .map((field, i) => {
+                        return {
+                            type: "textfield",
+                            name: field.name,
+                            value: "",
+                            autofocus: i==0,
+                            style: {
+                                decoration: {
+                                    labelText: field.displayName,
+                                    icon: {
+                                        type: "icon",
+                                        value: field.icon,
+                                    }
+                                },
                             }
-                        }), {
-                        type: "textfield",
-                        value: dateStr,
-                        name: "date",
-                        style: {
-                            decoration: {
-                                labelText: "Post date",
-                                helperText: "Format: yyyy-mm-dd",
-                                icon: {
-                                    type: "icon",
-                                    value: "calendar_today"
-                                }
-                            },
                         }
-                    },
-                    {
-                        type: "textfield",
-                        value: timeStr,
-                        name: "time",
-                        style: {
-                            decoration: {
-                                labelText: "Post time",
-                                helperText: "At UTC with the next format: hh:mm:ss",
-                                icon: {
-                                    type: "icon",
-                                    value: "access_time"
-                                }
-                            },
-                        }
-                    },
-                    {
-                        type: "button",
-                        text: "Save",
-                        submit: true,
+                    }), {
+                    type: "textfield",
+                    value: dateStr,
+                    name: "date",
+                    style: {
+                        decoration: {
+                            labelText: "Post date",
+                            helperText: "Format: yyyy-mm-dd",
+                            icon: {
+                                type: "icon",
+                                value: "calendar_today"
+                            }
+                        },
                     }
-                ]
-            }
+                },
+                {
+                    type: "textfield",
+                    value: timeStr,
+                    name: "time",
+                    style: {
+                        decoration: {
+                            labelText: "Post time",
+                            helperText: "At UTC with the next format: hh:mm:ss",
+                            icon: {
+                                type: "icon",
+                                value: "access_time"
+                            }
+                        },
+                    }
+                },
+                {
+                    type: "button",
+                    text: "Save",
+                    submit: true,
+                }
+            ]
         }
     }
 }

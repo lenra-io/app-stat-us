@@ -46,6 +46,8 @@ const colors = {
     black: 0xFF000000,
     grey: 0xFFE0E0E0,
     blue: 0xFF19ACEA,
+    green: 0xFF389589,
+    yellow: 0xFFEF902C,
     red: 0xFFE92236,
     transparentMask: 0x00FFFFFF,
 }

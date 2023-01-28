@@ -2,7 +2,8 @@ const Platform = require('../../classes/Platform.js');
 const Post = require('../../classes/Post.js');
 const PostStat = require('../../classes/PostStat.js');
 const navigationService = require('../../services/navigationService.js');
-const ui = require('../utils/ui.js')
+const ui = require('../utils/ui.js');
+const { url } = require('./url.js');
 
 /**
  * 
@@ -44,16 +45,12 @@ function post_list(posts, props) {
         }
     }));
     return {
-        type: "container",
-        constraints: { maxWidth: 600 },
-        child: {
-            type: "flex",
-            spacing: 16,
-            mainAxisAlignment: "start",
-            crossAxisAlignment: "stretch",
-            direction: "vertical",
-            children
-        }
+        type: "flex",
+        spacing: 16,
+        mainAxisAlignment: "start",
+        crossAxisAlignment: "stretch",
+        direction: "vertical",
+        children
     }
 }
 
@@ -64,6 +61,8 @@ function post_list(posts, props) {
  * @returns 
  */
 function post_card([post], props) {
+    let name = post.name;
+    if (post.channel) name = `${post.channel} - ${name}`;
     return {
         type: "actionable",
         child: {
@@ -114,12 +113,14 @@ function post_card([post], props) {
                             }, {
                                 type: "text",
                                 style: {
-                                    fontSize: 16
+                                    fontSize: 16,
+                                    fontWeight: "bold",
                                 },
-                                value: post.name
+                                value: name
                             }
                         ]
                     },
+                    url([post], {}),
                     {
                         type: "view",
                         name: "post_stats",

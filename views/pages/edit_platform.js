@@ -35,91 +35,88 @@ function form([platform], { state }) {
     let colorHex = state?.colorHex || ui.color.toHex(platform?.color);
     let color = ui.color.fromHex(colorHex);
     return {
-        type: "container",
-        constraints: { maxWidth: 600 },
-        child: {
-            type: "flex",
-            spacing: 16,
-            mainAxisAlignment: "start",
-            crossAxisAlignment: "stretch",
-            direction: "vertical",
-            children: [
-                {
-                    type: "textfield",
-                    value: firstProperty("name", "", state, platform),
-                    style: {
-                        decoration: {
-                            labelText: "Platform name"
-                        },
+        type: "flex",
+        spacing: 16,
+        mainAxisAlignment: "start",
+        crossAxisAlignment: "stretch",
+        direction: "vertical",
+        children: [
+            {
+                type: "textfield",
+                value: firstProperty("name", "", state, platform),
+                autofocus: true,
+                style: {
+                    decoration: {
+                        labelText: "Platform name"
                     },
-                    onChanged: {
-                        action: "setStateProperty",
-                        props: {
-                            property: "name"
-                        }
-                    }
                 },
-                {
-                    type: "textfield",
-                    value: colorHex || "",
-                    style: {
-                        decoration: {
-                            labelText: "Color",
-                            filled: !!(color),
-                            fillColor: color,
-                            helperText: "Hex format: #FF0000 for red",
-                        },
-                    },
-                    onChanged: {
-                        action: "setStateProperty",
-                        props: {
-                            property: "colorHex"
-                        }
-                    }
-                },
-                {
-                    type: "textfield",
-                    value: firstProperty("url", "", state, platform),
-                    style: {
-                        decoration: {
-                            labelText: "Page URL",
-                            helperText: "Full url: https://www.lenra.io"
-                        },
-                    },
-                    onChanged: {
-                        action: "setStateProperty",
-                        props: {
-                            property: "url"
-                        }
-                    }
-                },
-                {
-                    type: "textfield",
-                    value: firstProperty("account", "", state, platform),
-                    style: {
-                        decoration: {
-                            labelText: "Platform account name",
-                            helperText: "if needed"
-                        },
-                    },
-                    onChanged: {
-                        action: "setStateProperty",
-                        props: {
-                            property: "account"
-                        }
-                    }
-                },
-                ...PostStat.fields
-                    .map(property => booleanField(property, state, platform)),
-                {
-                    type: "button",
-                    text: "Save",
-                    onPressed: {
-                        action: "savePlatform"
+                onChanged: {
+                    action: "setStateProperty",
+                    props: {
+                        property: "name"
                     }
                 }
-            ]
-        }
+            },
+            {
+                type: "textfield",
+                value: colorHex || "",
+                style: {
+                    decoration: {
+                        labelText: "Color",
+                        filled: !!(color),
+                        fillColor: color,
+                        helperText: "Hex format: #FF0000 for red",
+                    },
+                },
+                onChanged: {
+                    action: "setStateProperty",
+                    props: {
+                        property: "colorHex"
+                    }
+                }
+            },
+            {
+                type: "textfield",
+                value: firstProperty("url", "", state, platform),
+                style: {
+                    decoration: {
+                        labelText: "Page URL",
+                        helperText: "Full url: https://www.lenra.io"
+                    },
+                },
+                onChanged: {
+                    action: "setStateProperty",
+                    props: {
+                        property: "url"
+                    }
+                }
+            },
+            {
+                type: "textfield",
+                value: firstProperty("account", "", state, platform),
+                style: {
+                    decoration: {
+                        labelText: "Platform account name",
+                        helperText: "if needed"
+                    },
+                },
+                onChanged: {
+                    action: "setStateProperty",
+                    props: {
+                        property: "account"
+                    }
+                }
+            },
+            ...PostStat.fields
+                .map(property => booleanField(property, state, platform)),
+            {
+                type: "button",
+                text: "Save",
+                onPressed: {
+                    action: "savePlatform"
+                }
+            }
+        ]
     }
 }
 

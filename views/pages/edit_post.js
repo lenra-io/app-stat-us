@@ -42,97 +42,94 @@ function form([post], { state }) {
             action: "savePost"
         },
         child: {
-            type: "container",
-            constraints: { maxWidth: 600 },
-            child: {
-                type: "flex",
-                spacing: 16,
-                mainAxisAlignment: "start",
-                crossAxisAlignment: "stretch",
-                direction: "vertical",
-                children: [
-                    {
-                        type: "view",
-                        name: "platform_selector",
-                        coll: Platform.collection,
-                        query: {},
-                        props: {
-                            platform: state.platform || post?.platform
-                        }
-                    },
-                    {
-                        type: "textfield",
-                        value: firstProperty("name", "", state, post),
-                        name: "name",
-                        style: {
-                            decoration: {
-                                labelText: "Post name"
-                            },
-                        }
-                    },
-                    {
-                        type: "textfield",
-                        value: firstProperty("channel", "", state, post),
-                        name: "channel",
-                        style: {
-                            decoration: {
-                                labelText: "Platform channel name",
-                                helperText: "if needed"
-                            },
-                        }
-                    },
-                    {
-                        type: "textfield",
-                        value: firstProperty("url", "", state, post),
-                        name: "url",
-                        style: {
-                            decoration: {
-                                labelText: "Post URL",
-                                helperText: "Full url: https://www.lenra.io/my-post",
-                                icon: {
-                                    type: "icon",
-                                    value: "insert_link"
-                                }
-                            },
-                        }
-                    },
-                    {
-                        type: "textfield",
-                        value: dateStr,
-                        name: "date",
-                        style: {
-                            decoration: {
-                                labelText: "Post date",
-                                helperText: "Format: yyyy-mm-dd",
-                                icon: {
-                                    type: "icon",
-                                    value: "calendar_today"
-                                }
-                            },
-                        }
-                    },
-                    {
-                        type: "textfield",
-                        value: timeStr,
-                        name: "time",
-                        style: {
-                            decoration: {
-                                labelText: "Post time",
-                                helperText: "At UTC with the next format: hh:mm:ss",
-                                icon: {
-                                    type: "icon",
-                                    value: "access_time"
-                                }
-                            },
-                        }
-                    },
-                    {
-                        type: "button",
-                        text: "Save",
-                        submit: true,
+            type: "flex",
+            spacing: 16,
+            mainAxisAlignment: "start",
+            crossAxisAlignment: "stretch",
+            direction: "vertical",
+            children: [
+                {
+                    type: "view",
+                    name: "platform_selector",
+                    coll: Platform.collection,
+                    query: {},
+                    props: {
+                        platform: state.platform || post?.platform
                     }
-                ]
-            }
+                },
+                {
+                    type: "textfield",
+                    value: firstProperty("name", "", state, post),
+                    name: "name",
+                    autofocus: true,
+                    style: {
+                        decoration: {
+                            labelText: "Post name"
+                        },
+                    }
+                },
+                {
+                    type: "textfield",
+                    value: firstProperty("channel", "", state, post),
+                    name: "channel",
+                    style: {
+                        decoration: {
+                            labelText: "Platform channel name",
+                            helperText: "if needed"
+                        },
+                    }
+                },
+                {
+                    type: "textfield",
+                    value: firstProperty("url", "", state, post),
+                    name: "url",
+                    style: {
+                        decoration: {
+                            labelText: "Post URL",
+                            helperText: "Full url: https://www.lenra.io/my-post",
+                            icon: {
+                                type: "icon",
+                                value: "insert_link"
+                            }
+                        },
+                    }
+                },
+                {
+                    type: "textfield",
+                    value: dateStr,
+                    name: "date",
+                    style: {
+                        decoration: {
+                            labelText: "Post date",
+                            helperText: "Format: yyyy-mm-dd",
+                            icon: {
+                                type: "icon",
+                                value: "calendar_today"
+                            }
+                        },
+                    }
+                },
+                {
+                    type: "textfield",
+                    value: timeStr,
+                    name: "time",
+                    style: {
+                        decoration: {
+                            labelText: "Post time",
+                            helperText: "At UTC with the next format: hh:mm:ss",
+                            icon: {
+                                type: "icon",
+                                value: "access_time"
+                            }
+                        },
+                    }
+                },
+                {
+                    type: "button",
+                    text: "Save",
+                    submit: true,
+                }
+            ]
         }
     }
 }

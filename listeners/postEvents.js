@@ -80,12 +80,7 @@ async function savePostStat(_props, event, api) {
     if (errors.length == 0) {
         // save or update
         postStat = await createDoc.call(null, api, PostStat.collection, postStat);
-        if (isUpdate) return popState(api, navigation);
-        return replaceState(api, navigation, {
-            page: "post",
-            post: navigation.state.post,
-            platform: navigation.state.platform,
-        });
+        return popState(api, navigation);
     }
     else {
         return updateState(api, navigation, {

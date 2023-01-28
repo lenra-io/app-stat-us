@@ -3,4 +3,5 @@ module.exports = {
     ...require("./platform_list"),
     ...require("./post_list"),
     ...require("./post_stats"),
+    ...require("./url"),
 }

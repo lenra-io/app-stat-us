@@ -29,7 +29,7 @@ function platform_list(platforms, props) {
     }));
     return {
         type: "flex",
-        spacing: 16,
+        spacing: 24,
         mainAxisAlignment: "center",
         padding: ui.padding.all(16),
         fillParent: true,
@@ -110,7 +110,8 @@ function platform_title([platform], props) {
             page: "platform",
             platform: platform._id
         }
-    }
+    };
+    const size = props.size || 24;
     let child = {
         type: "flex",
         spacing: 8,
@@ -124,13 +125,17 @@ function platform_title([platform], props) {
                     _id: platform._id
                 },
                 props: {
-                    size: props.size || 24,
+                    size,
                     boxShadow: {},
-
+                    onPressed: null,
                 }
             }, {
                 type: "text",
-                value: platform.name
+                value: platform.name,
+                style: {
+                    fontWeight: props.fontWeight,
+                    fontSize: size * 2 / 3,
+                }
             }
         ]
     };

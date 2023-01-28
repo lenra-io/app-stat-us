@@ -15,7 +15,6 @@ function content(_data, { state }) {
         type: "flex",
         direction: "vertical",
         spacing: 32,
-        mainAxisAlignment: "spaceEvenly",
         crossAxisAlignment: "center",
         children: [
             {

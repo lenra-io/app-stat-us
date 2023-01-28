@@ -31,6 +31,7 @@ module.exports = (navigations, _props) => {
       {
         type: "container",
         padding: ui.padding.all(32),
+        constraints: { maxWidth: 864 },
         child: {
           type: "view",
           name: `${navigation.state.page}_content`,

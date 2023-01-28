@@ -30,9 +30,13 @@ module.exports = {
             return lenraDocumentService.createDoc(api, collection, { ...homeNavigation, user: "@me" });
         }
         else {
-            navigation = { ...navigation, ...homeNavigation };
-            return lenraDocumentService.updateDoc(api, collection, navigation);
+            return replaceNavigation(api, navigation, homeNavigation);
         }
+    },
+    async replaceNavigation(api, navigation, newNavigation) {
+        navigation = navigation || await getNavigation(api);
+        navigation = { ...navigation, ...newNavigation };
+        return lenraDocumentService.updateDoc(api, collection, navigation);
     },
     async replaceState(api, navigation, newState) {
         navigation = navigation || await getNavigation(api);

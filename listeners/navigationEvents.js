@@ -4,8 +4,12 @@ function home(props, event, api) {
     return navigationService.home(api);
 }
 
+function replaceNavigation(props, event, api) {
+    return navigationService.replaceNavigation(api, null, props);
+}
+
 function setPage(props, event, api) {
-    return navigationService.pushState(api, null, {page: props.page});
+    return navigationService.pushState(api, null, { page: props.page });
 }
 
 function pushState(props, event, api) {
@@ -21,19 +25,20 @@ function replaceState(props, event, api) {
 }
 
 function setStateProperty(props, event, api) {
-    return navigationService.updateState(api, null, {[props.property]: event.value || props.value});
+    return navigationService.updateState(api, null, { [props.property]: event.value || props.value });
 }
 
 function openModal(props, event, api) {
-    return navigationService.updateState(api, null, {modal: props.modal});
+    return navigationService.updateState(api, null, { modal: props.modal });
 }
 
 function closeModal(props, event, api) {
-    return navigationService.updateState(api, null, {modal: undefined});
+    return navigationService.updateState(api, null, { modal: undefined });
 }
 
 module.exports = {
     home,
+    replaceNavigation,
     setPage,
     pushState,
     popState,
