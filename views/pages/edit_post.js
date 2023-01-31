@@ -68,6 +68,7 @@ function form([post], { state }) {
                         },
                     }
                 },
+                post_type_selector(state.type || post.type),
                 {
                     type: "textfield",
                     value: firstProperty("channel", "", state, post),
@@ -132,6 +133,34 @@ function form([post], { state }) {
             ]
         }
     }
+}
+
+
+function post_type_selector(type) {
+    const current = Post.types.find(t => t.name == type)
+    let children = Post.types.map(type => {
+        return {
+            type: "menuItem",
+            text: type.displayName,
+            isSelected: type == current,
+            onPressed: {
+                action: "setStateProperty",
+                props: {
+                    property: "type",
+                    value: type.name,
+                }
+            }
+        }
+    });
+    const child = {
+        type: "menu",
+        children
+    };
+    return {
+        type: "dropdownButton",
+        text: current ? current.displayName : "Select a type",
+        child,
+    };
 }
 
 /**

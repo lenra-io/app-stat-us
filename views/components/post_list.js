@@ -139,6 +139,10 @@ function post_card([post], props) {
                             }
                         ]
                     },
+                    {
+                        type: "text",
+                        value: `type: ${Post.types.find(type => type.name == post.type)?.displayName || "Not defined"}`
+                    },
                     url([post], {}),
                     {
                         type: "view",

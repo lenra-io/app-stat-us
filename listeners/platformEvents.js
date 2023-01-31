@@ -1,7 +1,7 @@
 const Platform = require('../classes/Platform.js');
 const PostStat = require('../classes/PostStat.js');
 const { updateDoc, createDoc, getDoc } = require('../services/api.js');
-const { popState, replaceState } = require('../services/navigationService.js');
+const { popState, replaceState, updateState } = require('../services/navigationService.js');
 const navigationService = require('../services/navigationService.js');
 const { urlRegex } = require('../views/utils/data.js');
 const { getNavigation } = navigationService;

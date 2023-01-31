@@ -58,7 +58,7 @@ const colors = {
  * @returns The luminance value between 0 (for black) and 1 (for white)
  */
 function luminance(color) {
-    if (color === undefined || color === null)
+    if (color === undefined || color === null) throw new Error("The color is undefined");
     color = BigInt(color);
     const r = Number((color & BigInt(0xFF0000)) >> BigInt(16)) / 255,
         g = Number((color & BigInt(0xFF00)) >> BigInt(8)) / 255,

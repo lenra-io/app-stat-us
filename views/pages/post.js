@@ -101,6 +101,10 @@ function infos([post], props) {
                 },
                 value: name
             },
+            {
+                type: "text",
+                value: `type: ${Post.types.find(type => type.name == post.type)?.displayName || "Not defined"}`
+            },
             url([post], {}),
         ]
     };
