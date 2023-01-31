@@ -191,7 +191,7 @@ function platform_title([platform], props) {
 function card(name, color, style, onPressed) {
     const size = style.size || 64;
     const boxShadow = "boxShadow" in style ? style.boxShadow : defaultBoxShadow;
-    const textColor = ui.color.betterContrast(color);
+    const textColor = color ? ui.color.betterContrast(color) : 0xFF000000;
     let child = {
         type: "container",
         alignment: "center",

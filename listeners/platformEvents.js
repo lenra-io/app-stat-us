@@ -60,6 +60,7 @@ async function savePlatform(props, event, api) {
     else if (platform.name.length < 3) errors.push({ field: "name", message: "The platform name must contain at least 3 characters" });
     if (!platform.url) errors.push({ field: "url", message: "The platform url is required" });
     else if (!urlRegex.test(platform.url)) errors.push({ field: "url", message: "The platform url does not seem to be correct" });
+    if (!platform.color && platform.color !== 0) errors.push({ field: "color", message: "The platform color is required" });
     if (errors.length == 0) {
         // save or update
         const isUpdate = !!platform._id;
