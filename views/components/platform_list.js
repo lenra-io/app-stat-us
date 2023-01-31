@@ -189,6 +189,7 @@ function platform_title([platform], props) {
 }
 
 function card(name, color, style, onPressed) {
+    if (!color) color = ui.color.grey;
     const size = style.size || 64;
     const boxShadow = "boxShadow" in style ? style.boxShadow : defaultBoxShadow;
     const textColor = color ? ui.color.betterContrast(color) : 0xFF000000;
