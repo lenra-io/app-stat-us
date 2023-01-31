@@ -68,7 +68,7 @@ function form([post], { state }) {
                         },
                     }
                 },
-                post_type_selector(state.type || post.type),
+                post_type_selector(state?.type || post?.type),
                 {
                     type: "textfield",
                     value: firstProperty("channel", "", state, post),
