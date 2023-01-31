@@ -10,7 +10,7 @@ const timeRegex = /^\d{2}:\d{2}:\d{2}$/;
  */
 function firstProperty(property, defaultValue, ...data) {
     for (const o of data) {
-        if (o && property in o) return o[property];
+        if (o && property in o && o[property]!=null) return o[property];
     }
     return defaultValue;
 }
