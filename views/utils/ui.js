@@ -102,7 +102,7 @@ const color = {
         return ret;
     },
     fromHex: (colorHex) => {
-        if (!/^#[a-fA-F0-9]{6}$/.test(colorHex)) return undefined;
+        if (!colorHex || !/^#[a-fA-F0-9]{6}$/.test(colorHex)) return undefined;
         return parseInt(colorHex.substring(1), 16) | 0xFF000000;
     },
     toHex: (color) => {
