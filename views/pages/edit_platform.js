@@ -36,72 +36,72 @@ function form([platform], { state }) {
     let color = ui.color.fromHex(colorHex);
     const action = platform ? "updatePlatform" : "setStateProperty";
     const children = [
-        {
-            type: "textfield",
-            value: firstProperty("name", "", state, platform),
-            autofocus: true,
-            style: {
-                decoration: {
-                    labelText: "Platform name"
-                },
-            },
-            onChanged: {
-                action,
-                props: {
-                    property: "name"
-                }
-            }
-        },
-        {
-            type: "textfield",
-            value: colorHex || "",
-            style: {
-                decoration: {
-                    labelText: "Color",
-                    filled: !!(color),
-                    fillColor: color,
-                    helperText: "Hex format: #FF0000 for red",
-                },
-            },
-            onChanged: {
-                action,
-                props: {
-                    property: "colorHex"
-                }
-            }
-        },
-        {
-            type: "textfield",
-            value: firstProperty("url", "", state, platform),
-            style: {
-                decoration: {
-                    labelText: "Page URL",
-                    helperText: "Full url: https://www.lenra.io"
-                },
-            },
-            onChanged: {
-                action,
-                props: {
-                    property: "url"
-                }
-            }
-        },
-        {
-            type: "textfield",
-            value: firstProperty("account", "", state, platform),
-            style: {
-                decoration: {
-                    labelText: "Platform account name",
-                    helperText: "if needed"
-                },
-            },
-            onChanged: {
-                action,
-                props: {
-                    property: "account"
-                }
-            }
-        },
+        // {
+        //     type: "textfield",
+        //     value: firstProperty("name", "", state, platform),
+        //     autofocus: true,
+        //     style: {
+        //         decoration: {
+        //             labelText: "Platform name"
+        //         },
+        //     },
+        //     onChanged: {
+        //         action,
+        //         props: {
+        //             property: "name"
+        //         }
+        //     }
+        // },
+        // {
+        //     type: "textfield",
+        //     value: colorHex || "",
+        //     style: {
+        //         decoration: {
+        //             labelText: "Color",
+        //             filled: !!(color),
+        //             fillColor: color,
+        //             helperText: "Hex format: #FF0000 for red",
+        //         },
+        //     },
+        //     onChanged: {
+        //         action,
+        //         props: {
+        //             property: "colorHex"
+        //         }
+        //     }
+        // },
+        // {
+        //     type: "textfield",
+        //     value: firstProperty("url", "", state, platform),
+        //     style: {
+        //         decoration: {
+        //             labelText: "Page URL",
+        //             helperText: "Full url: https://www.lenra.io"
+        //         },
+        //     },
+        //     onChanged: {
+        //         action,
+        //         props: {
+        //             property: "url"
+        //         }
+        //     }
+        // },
+        // {
+        //     type: "textfield",
+        //     value: firstProperty("account", "", state, platform),
+        //     style: {
+        //         decoration: {
+        //             labelText: "Platform account name",
+        //             helperText: "if needed"
+        //         },
+        //     },
+        //     onChanged: {
+        //         action,
+        //         props: {
+        //             property: "account"
+        //         }
+        //     }
+        // },
         ...PostStat.fields
             .map(property => booleanField(property, state, platform)),
     ];
