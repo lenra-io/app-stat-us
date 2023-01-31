@@ -21,7 +21,7 @@
 <h3 align="center">Stat Us</h3>
 
   <p align="center">
-    A Lenra app to analyse your stats from your social media posts.
+    A Lenra app to analyse stats from your social media posts. Add and edit any social media you want, e.g Reddit, Dev etc ...
     <br />
     <br />
     <a href="https://github.com/lenra-io/app-stat-us/issues">Report Bug</a>
