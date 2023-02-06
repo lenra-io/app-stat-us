@@ -1,9 +1,9 @@
 'use strict'
 
+const { View, colors, Flex, TextField, Button, Icon, Flexible, Text, Toggle } = require("@lenra/components");
 const Platform = require("../../classes/Platform");
 const PostStat = require("../../classes/PostStat");
 const { firstProperty } = require("../utils/data");
-const ui = require("../utils/ui");
 
 /**
  * @param {*} _data 
@@ -11,16 +11,11 @@ const ui = require("../utils/ui");
  * @returns 
  */
 function content(_data, props) {
-    const child = {
-        type: "view",
-        name: 'edit_platform_form',
-        props
-    };
+    const child = View.new('edit_platform_form').props(props);
     if (props.state.platform) {
-        child.coll = Platform.collection;
-        child.query = {
+        child.data(Platform.collection, {
             _id: props.state.platform
-        };
+        });
     }
     return child;
 }
@@ -32,128 +27,71 @@ function content(_data, props) {
  * @returns 
  */
 function form([platform], { state }) {
-    let colorHex = state?.colorHex || ui.color.toHex(platform?.color);
-    let color = ui.color.fromHex(colorHex);
+    const colorHex = state?.colorHex || colors.toHex(platform?.color);
+    const color = colors.fromHex(colorHex);
+    const textColor = color ? colors.betterContrast(color) : undefined;
     const action = platform ? "updatePlatform" : "setStateProperty";
-    const children = [
-        {
-            type: "textfield",
-            value: firstProperty("name", "", state, platform),
-            autofocus: true,
-            style: {
+    const flex = Flex.new(
+        TextField.new(firstProperty("name", "", state, platform))
+            .autofocus(true)
+            .style({
                 decoration: {
                     labelText: "Platform name"
                 },
-            },
-            onChanged: {
-                action,
-                props: {
-                    property: "name"
-                }
-            }
-        },
-        {
-            type: "textfield",
-            value: colorHex || "",
-            style: {
+            })
+            .onChanged(action, { property: "name" }),
+        TextField.new(colorHex || "")
+            .style({
+                textStyle: {
+                    color: textColor,
+                },
                 decoration: {
                     labelText: "Color",
                     filled: !!(color),
                     fillColor: color,
                     helperText: "Hex format: #FF0000 for red",
                 },
-            },
-            onChanged: {
-                action,
-                props: {
-                    property: "colorHex"
-                }
-            }
-        },
-        {
-            type: "textfield",
-            value: firstProperty("url", "", state, platform),
-            style: {
+            })
+            .onChanged(action, { property: "colorHex" }),
+        TextField.new(firstProperty("url", "", state, platform))
+            .style({
                 decoration: {
                     labelText: "Page URL",
                     helperText: "Full url: https://www.lenra.io"
                 },
-            },
-            onChanged: {
-                action,
-                props: {
-                    property: "url"
-                }
-            }
-        },
-        {
-            type: "textfield",
-            value: firstProperty("account", "", state, platform),
-            style: {
+            })
+            .onChanged(action, { property: "url" }),
+        TextField.new(firstProperty("account", "", state, platform))
+            .style({
                 decoration: {
                     labelText: "Platform account name",
                     helperText: "if needed"
                 },
-            },
-            onChanged: {
-                action,
-                props: {
-                    property: "account"
-                }
-            }
-        },
-        ...PostStat.fields
-            .map(property => booleanField(property, state, platform)),
-    ];
-    if (!platform) {
-        children.push({
-            type: "button",
-            text: "Save",
-            onPressed: {
-                action: "savePlatform"
-            }
-        });
-    }
-    return {
-        type: "flex",
-        spacing: 16,
-        mainAxisAlignment: "start",
-        crossAxisAlignment: "stretch",
-        direction: "vertical",
-        children
-    }
-}
+            })
+            .onChanged(action, { property: "account" }),
+    )
+        .spacing(16)
+        .mainAxisAlignment("start")
+        .crossAxisAlignment("stretch")
+        .direction("vertical");
 
-function booleanField(property, state, platform) {
-    const action = platform ? "updatePlatform" : "setStateProperty";
-    return {
-        type: "flex",
-        spacing: 16,
-        crossAxisAlignment: "center",
-        children: [
-            {
-                type: "icon",
-                value: property.icon,
-            },
-            {
-                type: "flexible",
-                child: {
-                    type: "text",
-                    value: property.displayName
-                }
-            },
-            {
-                type: "toggle",
-                value: firstProperty(property.name, false, state, platform),
-                onPressed: {
-                    action,
-                    props: {
-                        property: property.name
-                    }
-                }
-            },
-        ]
-    }
+    PostStat.fields.forEach(property =>
+        flex.addChild(
+            Flex.new(
+                Icon.new(property.icon),
+                Flexible.new(
+                    Text.new(property.displayName)
+                ),
+                Toggle.new(firstProperty(property.name, false, state, platform))
+                    .onPressed(action, { property: property.name })
+            )
+                .spacing(16)
+                .crossAxisAlignment("center")
+        )
+    );
+
+    if (!platform) flex.addChild(Button.new("Save").onPressed("savePlatform"));
+    return flex;
 }
 
 /**
@@ -162,10 +100,7 @@ function booleanField(property, state, platform) {
  * @returns 
  */
 function menu(_data, { state }) {
-    return {
-        type: "view",
-        name: "menu",
-    }
+    return View.new("menu");
 }
 
 module.exports = {

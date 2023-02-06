@@ -1,4 +1,6 @@
-const ui = require('../utils/ui.js');
+const { colors } = require("@lenra/components");
+const { LenraColors } = colors;
+
 const defaultDelay = 7 * 24 * 3600 * 1000; // 7 days
 
 /**
@@ -11,14 +13,14 @@ function updateStatus(docs, props) {
     const delay = props.delay || defaultDelay;
     const diff = Date.now() - date;
     const size = props.size || 12;
-    let color = ui.color.green;
+    let color = LenraColors.greenPulse;
     let text = "Up to date";
     if (diff > delay) {
-        color = ui.color.red;
+        color = LenraColors.redPulse;
         text = "Outdated";
     }
     else if (diff > delay / 2) {
-        color = ui.color.yellow;
+        color = LenraColors.yellowPulse;
         text = "Old";
     }
     return {

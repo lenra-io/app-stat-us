@@ -1,6 +1,6 @@
+const { colors, padding, borderRadius, Container } = require('@lenra/components');
 const Platform = require('../../classes/Platform.js');
 const { homeNavigation } = require('../../services/navigationService.js');
-const ui = require('../utils/ui.js')
 
 const defaultBoxShadow = {
     blurRadius: 10,
@@ -8,7 +8,7 @@ const defaultBoxShadow = {
         dx: 2,
         dy: 2
     },
-    color: ui.color.opacity(ui.color.black, 0.7)
+    color: colors.opacity(colors.Colors.black, 0.7)
 };
 
 /**
@@ -71,7 +71,7 @@ function platform_list(platforms, props) {
             }
         };
     });
-    if (props && props.add) children.push(card("+", ui.color.grey, {}, {
+    if (props && props.add) children.push(card("+", 0xFFAAAAAA, {}, {
         action: "pushState",
         props: {
             page: "edit_platform"
@@ -81,7 +81,7 @@ function platform_list(platforms, props) {
         type: "flex",
         spacing: 24,
         mainAxisAlignment: "center",
-        padding: ui.padding.all(16),
+        padding: padding.all(16),
         fillParent: true,
         scroll: true,
         children
@@ -189,20 +189,12 @@ function platform_title([platform], props) {
 }
 
 function card(name, color, style, onPressed) {
-    if (!color) color = ui.color.grey;
+    if (!color) color = 0xFFAAAAAA;
     const size = style.size || 64;
     const boxShadow = "boxShadow" in style ? style.boxShadow : defaultBoxShadow;
-    const textColor = color ? ui.color.betterContrast(color) : 0xFF000000;
-    let child = {
-        type: "container",
-        alignment: "center",
-        constraints: ui.constraints.all(size),
-        decoration: {
-            color,
-            borderRadius: ui.borderRadius.all(size / 8),
-            boxShadow,
-        },
-        child: {
+    const textColor = color ? colors.betterContrast(color) : 0xFF000000;
+    let child = Container.new(
+        {
             type: "text",
             style: {
                 color: textColor,
@@ -211,7 +203,13 @@ function card(name, color, style, onPressed) {
             },
             value: name.substring(0, 1)
         }
-    };
+    )
+        .width(size)
+        .height(size)
+        .alignment("center")
+        .color(color)
+        .borderRadius(borderRadius.all(size / 8))
+        .boxShadow(boxShadow);
     if (onPressed) {
         child = {
             type: "actionable",

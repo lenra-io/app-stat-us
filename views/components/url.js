@@ -1,4 +1,4 @@
-const ui = require('../utils/ui.js');
+const { colors } = require("@lenra/components");
 
 /**
  * @param {Document[]} docs
@@ -19,7 +19,7 @@ function url([doc], props) {
             {
                 type: "text",
                 style: {
-                    color: ui.color.blue,
+                    color: colors.LenraColors.bluePulse,
                 },
                 value: doc.url
             },

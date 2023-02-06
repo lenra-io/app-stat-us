@@ -6,7 +6,6 @@ const navigationService = require('../services/navigationService.js');
 const { postNavigation } = require('../views/components/post_list.js');
 const { urlRegex, dateRegex, timeRegex } = require('../views/utils/data.js');
 const { getNavigation } = navigationService;
-const ui = require('../views/utils/ui.js');
 
 async function savePost(_props, event, api) {
     const navigation = await getNavigation(api);

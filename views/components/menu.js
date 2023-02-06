@@ -1,7 +1,7 @@
+const { padding } = require('@lenra/components');
 const Platform = require('../../classes/Platform.js');
 const Post = require('../../classes/Post.js');
 const navigationService = require('../../services/navigationService.js');
-const ui = require('../utils/ui.js');
 
 function menu(data, props) {
     const children = [{
@@ -36,7 +36,7 @@ function menu(data, props) {
             fillParent: true,
             mainAxisAlignment: "spaceBetween",
             crossAxisAlignment: "center",
-            padding: ui.padding.symmetric(32, 16),
+            padding: padding.symmetric(32, 16),
             children
         }
     }
@@ -81,7 +81,7 @@ function ariane([navigation], _props) {
             }),
             fillViewPageName(navigation.state, {
                 type: "container",
-                padding: ui.padding.symmetric(16, 8),
+                padding: padding.symmetric(16, 8),
                 child: {
                     type: "text",
                     style: {
@@ -111,7 +111,7 @@ function fillViewPageName(state, view) {
                     _id: state.platform
                 },
                 props: {
-                    padding: ui.padding.symmetric(16, 8),
+                    padding: padding.symmetric(16, 8),
                     onPressed: view.type == "button" ? view.onPressed : null
                 }
             };
@@ -124,7 +124,7 @@ function fillViewPageName(state, view) {
                     _id: state.post
                 },
                 props: {
-                    padding: ui.padding.symmetric(16, 8),
+                    padding: padding.symmetric(16, 8),
                     onPressed: view.type == "button" ? view.onPressed : null
                 }
             };

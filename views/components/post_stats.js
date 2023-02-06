@@ -1,5 +1,5 @@
+const { padding, colors } = require('@lenra/components');
 const PostStat = require('../../classes/PostStat.js');
-const ui = require('../utils/ui.js');
 
 /**
  * @param {PostStat[]} stats 
@@ -25,7 +25,7 @@ function post_stats(stats, props) {
         dateStr = `${dateStr.substring(0, 10)} ${dateStr.substring(11, 19)}`
         return {
             type: "container",
-            padding: ui.padding.symmetric(0, 8),
+            padding: padding.symmetric(0, 8),
             child: {
                 type: "wrap",
                 spacing: 16,
@@ -58,14 +58,14 @@ function fieldValue(field, stat, previousStat) {
     if (previousStat && isManaged && field.name in previousStat) {
         const diff = stat[field.name] - previousStat[field.name];
         let diffText = `${diff}`;
-        let diffColor = ui.color.red;
+        let diffColor = colors.LenraColors.redPulse;
         if (diff == 0) {
             diffText = ' - ';
-            diffColor = ui.color.yellow;
+            diffColor = colors.LenraColors.yellowPulse;
         }
         else if (diff > 0) {
             diffText = '+' + diffText;
-            diffColor = ui.color.green;
+            diffColor = colors.LenraColors.greenPulse;
         }
         children.push(
             {

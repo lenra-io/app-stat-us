@@ -1,8 +1,8 @@
+const { border, Container } = require('@lenra/components');
 const Platform = require('../../classes/Platform.js');
 const Post = require('../../classes/Post.js');
 const PostStat = require('../../classes/PostStat.js');
 const navigationService = require('../../services/navigationService.js');
-const ui = require('../utils/ui.js');
 const { platformNavigation } = require('./platform_list.js');
 const { url } = require('./url.js');
 
@@ -71,25 +71,8 @@ function post_card([post], props) {
     if (post.channel) name = `${post.channel} - ${name}`;
     return {
         type: "actionable",
-        child: {
-            type: "container",
-            border: ui.border.all({
-                width: 0.5,
-                color: 0xFFDCE0E7
-            }),
-            decoration: {
-                color: ui.color.white,
-                borderRadius: ui.borderRadius.all(8),
-                boxShadow: {
-                    blurRadius: 10,
-                    offset: {
-                        dx: 4,
-                        dy: 4
-                    },
-                    color: ui.color.opacity(ui.color.black, 0.7)
-                },
-            },
-            child: {
+        child: Container.card(
+            {
                 type: "flex",
                 spacing: 16,
                 mainAxisAlignment: "spaceEvenly",
@@ -158,7 +141,7 @@ function post_card([post], props) {
                     }
                 ]
             }
-        },
+        ),
         onPressed: navigateToPostListener(post.platform, post._id),
     };
 }

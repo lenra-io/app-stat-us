@@ -1,3 +1,4 @@
+const { colors } = require('@lenra/components');
 const Platform = require('../classes/Platform.js');
 const PostStat = require('../classes/PostStat.js');
 const { updateDoc, createDoc, getDoc } = require('../services/api.js');
@@ -5,14 +6,13 @@ const { popState, replaceState, updateState } = require('../services/navigationS
 const navigationService = require('../services/navigationService.js');
 const { urlRegex } = require('../views/utils/data.js');
 const { getNavigation } = navigationService;
-const ui = require('../views/utils/ui.js');
 
 async function updatePlatform(props, event, api) {
     const navigation = await getNavigation(api);
     const platform = await getDoc(api, Platform.collection, navigation.state.platform);
     const errors = [];
     if (props.property == "colorHex") {
-        const color = ui.color.fromHex(navigation.state.colorHex);
+        const color = colors.fromHex(navigation.state.colorHex);
         if (color)
             platform.color = color;
         else {
@@ -46,7 +46,7 @@ async function savePlatform(props, event, api) {
         if (field.name in navigation.state) platform[field.name] = navigation.state[field.name];
     });
     if ("colorHex" in navigation.state) {
-        const color = ui.color.fromHex(navigation.state.colorHex);
+        const color = colors.fromHex(navigation.state.colorHex);
         if (color)
             platform.color = color;
         else {
