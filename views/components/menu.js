@@ -1,45 +1,35 @@
-const { padding } = require('@lenra/components');
+const { padding, View, Flex, Container, colors, Text } = require('@lenra/components');
 const Platform = require('../../classes/Platform.js');
 const Post = require('../../classes/Post.js');
 const navigationService = require('../../services/navigationService.js');
 
 function menu(data, props) {
-    const children = [{
-        type: "view",
-        name: "ariane",
-        coll: navigationService.collection,
-        query: {
-            user: "@me"
-        }
-    }];
+    const flex = Flex.new(
+        View.new("ariane")
+            .data(navigationService.collection, {
+                user: "@me"
+            })
+    )
+        .fillParent(true)
+        .mainAxisAlignment("spaceBetween")
+        .crossAxisAlignment("center")
+        .padding(padding.symmetric(32, 16));
     if (props && props.mainAction) {
-        children.push({
+        flex.addChild({
             ...props.mainAction,
             type: "button"
         });
     }
-    return {
-        type: "container",
-        decoration: {
-            color: 0xFFFFFFFF,
-            boxShadow: {
-                blurRadius: 8,
-                color: 0x1A000000,
-                offset: {
-                    dx: 0,
-                    dy: 1
-                }
-            },
-        },
-        child: {
-            type: "flex",
-            fillParent: true,
-            mainAxisAlignment: "spaceBetween",
-            crossAxisAlignment: "center",
-            padding: padding.symmetric(32, 16),
-            children
-        }
-    }
+    return Container.new(flex)
+        .color(colors.Colors.white)
+        .boxShadow({
+            blurRadius: 8,
+            color: 0x1A000000,
+            offset: {
+                dx: 0,
+                dy: 1
+            }
+        });
 }
 
 /**
@@ -57,40 +47,34 @@ function ariane([navigation], _props) {
             },
         });
     }
-    return {
-        type: "flex",
-        crossAxisAlignment: "center",
-        children: [
-            ...navigation.history.flatMap((state, i) => {
-                return [
-                    fillViewPageName(state, {
-                        type: "button",
-                        mainStyle: "tertiary",
-                        onPressed: {
-                            action: "popState",
-                            props: {
-                                times: navigation.history.length - i
-                            }
+    return Flex.new(
+        ...navigation.history.flatMap((state, i) => {
+            return [
+                fillViewPageName(state, {
+                    type: "button",
+                    mainStyle: "tertiary",
+                    onPressed: {
+                        action: "popState",
+                        props: {
+                            times: navigation.history.length - i
                         }
-                    }),
-                    {
-                        type: "text",
-                        value: "/",
                     }
-                ]
-            }),
-            fillViewPageName(navigation.state, {
-                type: "container",
-                padding: padding.symmetric(16, 8),
-                child: {
-                    type: "text",
-                    style: {
-                        fontWeight: "bold",
-                    },
-                }
-            })
-        ]
-    };
+                }),
+                Text.new("/")
+            ]
+        }),
+        fillViewPageName(navigation.state, {
+            type: "container",
+            padding: padding.symmetric(16, 8),
+            child: {
+                type: "text",
+                style: {
+                    fontWeight: "bold",
+                },
+            }
+        })
+    )
+        .crossAxisAlignment("center");
 }
 
 /**
@@ -103,31 +87,23 @@ function fillViewPageName(state, view) {
         case 'home':
             return fillViewText(view, 'Stat Us');
         case 'platform':
-            return {
-                type: "view",
-                name: "platform_title",
-                coll: Platform.collection,
-                query: {
+            return View.new("platform_title")
+                .data(Platform.collection, {
                     _id: state.platform
-                },
-                props: {
+                })
+                .props({
                     padding: padding.symmetric(16, 8),
                     onPressed: view.type == "button" ? view.onPressed : null
-                }
-            };
+                });
         case 'post':
-            return {
-                type: "view",
-                name: "post_title",
-                coll: Post.collection,
-                query: {
+            return View.new("post_title")
+                .data(Post.collection, {
                     _id: state.post
-                },
-                props: {
+                })
+                .props({
                     padding: padding.symmetric(16, 8),
                     onPressed: view.type == "button" ? view.onPressed : null
-                }
-            };
+                });
         case 'edit_platform':
             return fillViewText(view, state.platform ? 'Edit' : 'Create platform');
         case 'edit_post':

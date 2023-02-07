@@ -1,4 +1,4 @@
-const { colors, Flex, Icon } = require("@lenra/components");
+const { colors, Flex, Icon, Text } = require("@lenra/components");
 
 /**
  * @param {Document[]} docs

@@ -1,4 +1,4 @@
-const { colors, padding, borderRadius, Container } = require('@lenra/components');
+const { colors, padding, borderRadius, Container, Text, Actionable } = require('@lenra/components');
 const Platform = require('../../classes/Platform.js');
 const { homeNavigation } = require('../../services/navigationService.js');
 
@@ -194,15 +194,12 @@ function card(name, color, style, onPressed) {
     const boxShadow = "boxShadow" in style ? style.boxShadow : defaultBoxShadow;
     const textColor = color ? colors.betterContrast(color) : 0xFF000000;
     let child = Container.new(
-        {
-            type: "text",
-            style: {
+        Text.new(name.substring(0, 1))
+            .style({
                 color: textColor,
                 fontWeight: "bold",
                 fontSize: size / 2
-            },
-            value: name.substring(0, 1)
-        }
+            })
     )
         .width(size)
         .height(size)
@@ -211,11 +208,8 @@ function card(name, color, style, onPressed) {
         .borderRadius(borderRadius.all(size / 8))
         .boxShadow(boxShadow);
     if (onPressed) {
-        child = {
-            type: "actionable",
-            child,
-            onPressed
-        };
+        child = Actionable.new(child)
+            .onPressed(onPressed.action, onPressed.props);
     }
     return child;
 }

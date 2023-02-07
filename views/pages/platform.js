@@ -60,7 +60,7 @@ function content(_data, { state }) {
  * @returns 
  */
 function menu(_data, { state }) {
-    return View("menu")
+    return View.new("menu")
         .props({
             mainAction: {
                 text: "New post",

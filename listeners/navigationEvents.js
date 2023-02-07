@@ -1,4 +1,5 @@
 const navigationService = require('../services/navigationService.js');
+const { firstProperty } = require('../views/utils/data.js');
 
 function home(props, event, api) {
     return navigationService.home(api);
@@ -25,7 +26,8 @@ function replaceState(props, event, api) {
 }
 
 function setStateProperty(props, event, api) {
-    return navigationService.updateState(api, null, { [props.property]: event.value || props.value });
+    console.log("setStateProperty", event, props);
+    return navigationService.updateState(api, null, { [props.property]: firstProperty("value", undefined, event, props) });
 }
 
 function openModal(props, event, api) {

@@ -1,6 +1,6 @@
 'use strict'
 
-const { View, Flex, Flexible, Button } = require("@lenra/components");
+const { View, Flex, Flexible, Button, Text } = require("@lenra/components");
 const Platform = require("../../classes/Platform");
 const Post = require("../../classes/Post");
 const PostStat = require("../../classes/PostStat");
