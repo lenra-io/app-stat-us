@@ -1,8 +1,9 @@
 'use strict'
 
-const { View, Form, Flex } = require("@lenra/components");
+const { View, Form, Flex, TextField, MenuItem, DropdownButton, Menu, Icon, Button } = require("@lenra/components");
 const Platform = require("../../classes/Platform");
 const Post = require("../../classes/Post");
+const { defaultMenu } = require("../components/menu");
 const { firstProperty } = require("../utils/data");
 
 /**
@@ -32,58 +33,38 @@ function form([post], { state }) {
     const timeStr = state.time || str.substring(11, 19);
     return Form.new(
         Flex.new(
-            {
-                type: "view",
-                name: "platform_selector",
-                coll: Platform.collection,
-                query: {},
-                props: {
-                    platform: state.platform || post?.platform
-                }
-            },
-            {
-                type: "textfield",
-                value: firstProperty("name", "", state, post),
-                name: "name",
-                autofocus: true,
-                style: {
+            View.new("platform_selector")
+                .coll(Platform.collection)
+                .props({ platform: state.platform || post?.platform }),
+            TextField.new(firstProperty("name", "", state, post))
+                .name("name")
+                .autofocus(true)
+                .style({
                     decoration: {
                         labelText: "Post name"
                     },
-                }
-            },
+                }),
             post_type_selector(state?.type || post?.type),
-            {
-                type: "textfield",
-                value: firstProperty("channel", "", state, post),
-                name: "channel",
-                style: {
+            TextField.new(firstProperty("channel", "", state, post))
+                .name("channel")
+                .style({
                     decoration: {
                         labelText: "Platform channel name",
                         helperText: "if needed"
                     },
-                }
-            },
-            {
-                type: "textfield",
-                value: firstProperty("url", "", state, post),
-                name: "url",
-                style: {
+                }),
+            TextField.new(firstProperty("url", "", state, post))
+                .name("url")
+                .style({
                     decoration: {
                         labelText: "Post URL",
                         helperText: "Full url: https://www.lenra.io/my-post",
-                        icon: {
-                            type: "icon",
-                            value: "insert_link"
-                        }
+                        icon: Icon.new("insert_link").toJSON()
                     },
-                }
-            },
-            {
-                type: "textfield",
-                value: dateStr,
-                name: "date",
-                style: {
+                }),
+            TextField.new(dateStr)
+                .name("date")
+                .style({
                     decoration: {
                         labelText: "Post date",
                         helperText: "Format: yyyy-mm-dd",
@@ -92,13 +73,10 @@ function form([post], { state }) {
                             value: "calendar_today"
                         }
                     },
-                }
-            },
-            {
-                type: "textfield",
-                value: timeStr,
-                name: "time",
-                style: {
+                }),
+            TextField.new(timeStr)
+                .name("time")
+                .style({
                     decoration: {
                         labelText: "Post time",
                         helperText: "At UTC with the next format: hh:mm:ss",
@@ -107,13 +85,9 @@ function form([post], { state }) {
                             value: "access_time"
                         }
                     },
-                }
-            },
-            {
-                type: "button",
-                text: "Save",
-                submit: true,
-            }
+                }),
+            Button.new("Save")
+                .submit(true)
         )
             .spacing(16)
             .mainAxisAlignment("start")
@@ -126,45 +100,23 @@ function form([post], { state }) {
 
 function post_type_selector(type) {
     const current = Post.types.find(t => t.name == type)
-    let children = Post.types.map(type => {
-        return {
-            type: "menuItem",
-            text: type.displayName,
-            isSelected: type == current,
-            onPressed: {
-                action: "setStateProperty",
-                props: {
-                    property: "type",
-                    value: type.name,
-                }
-            }
-        }
-    });
-    const child = {
-        type: "menu",
-        children
-    };
-    return {
-        type: "dropdownButton",
-        text: current ? current.displayName : "Select a type",
-        child,
-    };
-}
-
-/**
- * @param {*} _data 
- * @param {*} props 
- * @returns 
- */
-function menu(_data, _props) {
-    return {
-        type: "view",
-        name: "menu"
-    }
+    return DropdownButton.new(
+        current ? current.displayName : "Select a type",
+        Menu.new(
+            ...Post.types.map(type => {
+                return MenuItem.new(type.displayName)
+                    .isSelected(type == current)
+                    .onPressed("setStateProperty", {
+                        property: "type",
+                        value: type.name,
+                    });
+            })
+        )
+    );
 }
 
 module.exports = {
     content,
-    menu,
+    menu: defaultMenu,
     form,
 }

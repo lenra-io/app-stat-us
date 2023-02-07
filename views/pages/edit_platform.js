@@ -3,6 +3,7 @@
 const { View, colors, Flex, TextField, Button, Icon, Flexible, Text, Toggle } = require("@lenra/components");
 const Platform = require("../../classes/Platform");
 const PostStat = require("../../classes/PostStat");
+const { defaultMenu } = require("../components/menu");
 const { firstProperty } = require("../utils/data");
 
 /**
@@ -94,17 +95,8 @@ function form([platform], { state }) {
     return flex;
 }
 
-/**
- * @param {*} _data 
- * @param {*} props 
- * @returns 
- */
-function menu(_data, { state }) {
-    return View.new("menu");
-}
-
 module.exports = {
     content,
-    menu,
+    menu: defaultMenu,
     form,
 }

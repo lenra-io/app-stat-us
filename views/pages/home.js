@@ -1,5 +1,6 @@
 'use strict'
 
+const { View, Flex } = require("@lenra/components");
 const Platform = require("../../classes/Platform");
 const Post = require("../../classes/Post");
 
@@ -12,31 +13,20 @@ const pagination = 5;
  */
 function content(_data, { state }) {
     console.log("state", state);
-    return {
-        type: "flex",
-        direction: "vertical",
-        spacing: 32,
-        crossAxisAlignment: "center",
-        children: [
-            {
-                type: "view",
-                name: "platform_list",
-                coll: Platform.collection,
-                query: {},
-                props: { add: true }
-            },
-            {
-                type: "view",
-                name: "post_list",
-                coll: Post.collection,
-                query: {},
-                props: {
-                    limit: state.limit,
-                    pagination
-                }
-            }
-        ]
-    }
+    return Flex.new(
+        View.new("platform_list")
+            .coll(Platform.collection)
+            .props({ add: true }),
+        View.new("post_list")
+            .coll(Post.collection)
+            .props({
+                limit: state.limit,
+                pagination
+            }),
+    )
+        .direction("vertical")
+        .spacing(32)
+        .crossAxisAlignment("center");
 }
 
 /**
@@ -45,10 +35,8 @@ function content(_data, { state }) {
  * @returns 
  */
 function menu(_data, _props) {
-    return {
-        type: "view",
-        name: "menu",
-        props: {
+    return View.new("menu")
+        .props({
             mainAction: {
                 text: "New post",
                 onPressed: {
@@ -58,8 +46,7 @@ function menu(_data, _props) {
                     }
                 }
             }
-        }
-    }
+        });
 }
 
 module.exports = {

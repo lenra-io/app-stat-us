@@ -164,5 +164,6 @@ function fillViewText(view, text) {
 
 module.exports = {
     menu,
-    ariane
+    ariane,
+    defaultMenu: (_data, _props) => View.new("menu"),
 }

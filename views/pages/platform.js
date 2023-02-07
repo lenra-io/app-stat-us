@@ -1,5 +1,6 @@
 'use strict'
 
+const { View, Button, Flexible, Flex } = require("@lenra/components");
 const Platform = require("../../classes/Platform");
 const Post = require("../../classes/Post");
 
@@ -11,72 +12,46 @@ const pagination = 5;
  * @returns 
  */
 function content(_data, { state }) {
-    return {
-        type: "flex",
-        spacing: 16,
-        mainAxisAlignment: "start",
-        crossAxisAlignment: "stretch",
-        direction: "vertical",
-        children: [
-            {
-                type: "flex",
-                spacing: 16,
-                crossAxisAlignment: "center",
-                children: [
-                    {
-                        type: "flexible",
-                        child: {
-                            type: "view",
-                            name: "platform_title",
-                            coll: Platform.collection,
-                            query: {
-                                _id: state.platform
-                            },
-                            props: {
-                                onPressed: null,
-                                size: 32,
-                                fontWeight: 'bold',
-                            }
-                        }
-                    },
-                    {
-                        type: "button",
-                        mainStyle: "secondary",
-                        text: "Edit",
-                        onPressed: {
-                            action: "pushState",
-                            props: {
-                                page: "edit_platform",
-                                platform: state.platform
-                            }
-                        }
-                    }
-                ]
-            },
-            {
-                type: "view",
-                name: "url",
-                coll: Platform.collection,
-                query: {
-                    _id: state.platform
-                },
-            },
-            {
-                type: "view",
-                name: "post_list",
-                coll: Post.collection,
-                query: {
+    return Flex.new(
+        Flex.new(
+            Flexible.new(
+                View.new("platform_title")
+                    .data(Platform.collection, {
+                        _id: state.platform
+                    })
+                    .props({
+                        onPressed: null,
+                        size: 32,
+                        fontWeight: 'bold',
+                    })
+            ),
+            Button.new("Edit")
+                .mainStyle("secondary")
+                .onPressed("pushState", {
+                    page: "edit_platform",
                     platform: state.platform
-                },
-                props: {
-                    // add: true,
-                    limit: state.limit,
-                    pagination,
-                    platform: state.platform,
-                }
-            }
-        ]
-    }
+                })
+        )
+            .spacing(16)
+            .crossAxisAlignment("center"),
+        View.new("url")
+            .data(Platform.collection, {
+                _id: state.platform
+            }),
+        View.new("post_list")
+            .data(Post.collection, {
+                platform: state.platform
+            })
+            .props({
+                // add: true,
+                limit: state.limit,
+                pagination,
+                platform: state.platform,
+            })
+    )
+        .spacing(16)
+        .crossAxisAlignment("stretch")
+        .direction("vertical")
 }
 
 /**
@@ -85,10 +60,8 @@ function content(_data, { state }) {
  * @returns 
  */
 function menu(_data, { state }) {
-    return {
-        type: "view",
-        name: "menu",
-        props: {
+    return View("menu")
+        .props({
             mainAction: {
                 text: "New post",
                 onPressed: {
@@ -99,8 +72,7 @@ function menu(_data, { state }) {
                     }
                 }
             }
-        }
-    }
+        });
 }
 
 module.exports = {

@@ -1,15 +1,14 @@
 'use strict'
 
+const { View } = require("@lenra/components");
+
 /**
  * @param {*} _data 
  * @param {*} props 
  * @returns 
  */
 function content(_data, _props) {
-    return {
-        "type": "text",
-        "value": "Add platform stats page"
-    }
+    return Text.new("Add platform stats page");
 }
 
 /**
@@ -18,10 +17,8 @@ function content(_data, _props) {
  * @returns 
  */
 function menu(_data, _props) {
-    return {
-        type: "view",
-        name: "menu",
-        props: {
+    return View.new("menu")
+        .props({
             mainAction: {
                 text: "New game",
                 onPressed: {
@@ -31,8 +28,7 @@ function menu(_data, _props) {
                     }
                 }
             }
-        }
-    }
+        });
 }
 
 module.exports = {

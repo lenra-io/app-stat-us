@@ -1,5 +1,6 @@
 'use strict'
 
+const { View, Flex, Flexible, Button } = require("@lenra/components");
 const Platform = require("../../classes/Platform");
 const Post = require("../../classes/Post");
 const PostStat = require("../../classes/PostStat");
@@ -13,71 +14,45 @@ const pagination = 10;
  * @returns 
  */
 function content(_data, { state }) {
-    return {
-        type: "flex",
-        spacing: 32,
-        mainAxisAlignment: "start",
-        crossAxisAlignment: "stretch",
-        direction: "vertical",
-        children: [
-            {
-                type: "flex",
-                spacing: 16,
-                crossAxisAlignment: "center",
-                children: [
-                    {
-                        type: "flexible",
-                        child: {
-                            type: "view",
-                            name: "platform_title",
-                            coll: Platform.collection,
-                            query: {
-                                _id: state.platform
-                            },
-                            props: {
-                                onPressed: null,
-                                size: 32,
-                                fontWeight: 'bold',
-                            }
-                        }
-                    },
-                    {
-                        type: "button",
-                        mainStyle: "secondary",
-                        text: "Edit",
-                        onPressed: {
-                            action: "pushState",
-                            props: {
-                                page: "edit_post",
-                                post: state.post,
-                                platform: state.platform
-                            }
-                        }
-                    }
-                ]
-            },
-            {
-                type: "view",
-                name: "post_infos",
-                coll: Post.collection,
-                query: {
-                    _id: state.post
-                }
-            },
-            {
-                type: "view",
-                name: "post_stats",
-                coll: PostStat.collection,
-                query: {
+    return Flex.new(
+        Flex.new(
+            Flexible.new(
+                View.new("platform_title")
+                    .data(Platform.collection, {
+                        _id: state.platform
+                    })
+                    .props({
+                        onPressed: null,
+                        size: 32,
+                        fontWeight: 'bold',
+                    })
+            ),
+            Button.new("Edit")
+                .mainStyle("secondary")
+                .onPressed("pushState", {
+                    page: "edit_post",
                     post: state.post,
-                },
-                props: {
-                    limit: state.limit,
-                    pagination
-                }
-            }
-        ]
-    };
+                    platform: state.platform
+                })
+        )
+            .spacing(16)
+            .crossAxisAlignment("center"),
+        View.new("post_infos")
+            .data(Post.collection, {
+                _id: state.post
+            }),
+        View.new("post_stats")
+            .data(PostStat.collection, {
+                post: state.post,
+            })
+            .props({
+                limit: state.limit,
+                pagination
+            })
+    )
+        .spacing(32)
+        .crossAxisAlignment("stretch")
+        .direction("vertical")
 }
 
 /**
@@ -88,26 +63,17 @@ function content(_data, { state }) {
 function infos([post], props) {
     let name = post.name;
     if (post.channel) name = `${post.channel} - ${name}`;
-    return {
-        type: "flex",
-        spacing: 16,
-        direction: "vertical",
-        children: [
-            {
-                type: "text",
-                style: {
-                    fontSize: 24,
-                    fontWeight: "bold",
-                },
-                value: name
-            },
-            {
-                type: "text",
-                value: `type: ${Post.types.find(type => type.name == post.type)?.displayName || "Not defined"}`
-            },
-            url([post], {}),
-        ]
-    };
+    return Flex.new(
+        Text.new(name)
+            .style({
+                fontSize: 24,
+                fontWeight: "bold",
+            }),
+        Text.new(`type: ${Post.types.find(type => type.name == post.type)?.displayName || "Not defined"}`),
+        url([post], {}),
+    )
+        .spacing(16)
+        .direction("vertical")
 }
 
 /**
@@ -116,10 +82,8 @@ function infos([post], props) {
  * @returns 
  */
 function menu(_data, { state }) {
-    return {
-        type: "view",
-        name: "menu",
-        props: {
+    return View.new("menu")
+        .props({
             mainAction: {
                 text: "Add stats",
                 onPressed: {
@@ -131,8 +95,7 @@ function menu(_data, { state }) {
                     }
                 }
             }
-        }
-    }
+        })
 }
 
 module.exports = {

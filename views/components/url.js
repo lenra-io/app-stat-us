@@ -1,4 +1,4 @@
-const { colors } = require("@lenra/components");
+const { colors, Flex, Icon } = require("@lenra/components");
 
 /**
  * @param {Document[]} docs
@@ -6,25 +6,15 @@ const { colors } = require("@lenra/components");
  * @returns 
  */
 function url([doc], props) {
-    return {
-        type: "flex",
-        spacing: 8,
-        crossAxisAlignment: "center",
-        children: [
-            {
-                type: "icon",
-                value: "link",
-                size: 16,
-            },
-            {
-                type: "text",
-                style: {
-                    color: colors.LenraColors.bluePulse,
-                },
-                value: doc.url
-            },
-        ]
-    };
+    return Flex.new(
+        Icon.new("link").size(16),
+        Text.new(doc.url)
+            .style({
+                color: colors.LenraColors.bluePulse,
+            })
+    )
+        .spacing(8)
+        .crossAxisAlignment("center")
 }
 
 module.exports = {
