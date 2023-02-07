@@ -1,7 +1,3 @@
-// Copyright (c) Alex Ellis 2021. All rights reserved.
-// Copyright (c) OpenFaaS Author(s) 2021. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
 "use strict"
 
 const express = require('express');
@@ -132,17 +128,16 @@ async function handleAppView(req, res) {
     let { view, data, props } = req.body;
 
     if (Object.keys(viewHandlers).includes(view)) {
-        let possibleFutureRes = viewHandlers[view](data, props)
-
-        return Promise.resolve(possibleFutureRes)
-            .then(view => {
-                res.status(200).json(view);
-            })
-            .catch(err => {
-                const err_string = err.toString ? err.toString() : err;
-                console.error('handleAppView:', err_string);
-                res.status(500).send(err_string);
-            });
+        try {
+            let possibleFutureRes = viewHandlers[view](data || [], props || {})
+            const result = await Promise.resolve(possibleFutureRes);
+            res.status(200).json(result);
+        }
+        catch (err) {
+            const err_string = errorToString(err);
+            console.error('handleAppView:', err_string);
+            res.status(500).send(err_string);
+        }
     } else {
         let msg = `No view found for name ${view} in app manifest.`;
         console.error(msg);
@@ -165,21 +160,28 @@ async function handleAppListener(req, res) {
         listeners file need to exactly math with action name
     */
     if (Object.keys(listenerHandlers).includes(action)) {
-        let possibleFutureRes = listenerHandlers[action](props, event, api);
-
-        return Promise.resolve(possibleFutureRes)
-            .then(() => {
-                res.status(200).send();
-            })
-            .catch(err => {
-                const err_string = err.toString ? err.toString() : err;
-                console.error('handleAppAction:', err_string);
-                res.status(500).send(err_string);
-            });
+        try {
+            let possibleFutureRes = listenerHandlers[action](props || {}, event, api);
+            await Promise.resolve(possibleFutureRes);
+            res.status(200).send();
+        }
+        catch (err) {
+            const err_string = errorToString(err);
+            console.error('handleAppAction:', err_string);
+            res.status(500).send(err_string);
+        }
     } else {
         console.error(`No listener found for action ${action} in app manifest.`);
         res.status(404).send(`No listener found for action ${action} in app manifest.`);
     }
+}
+
+/**
+ * @param {Error} error 
+ * @returns 
+ */
+function errorToString(error) {
+    return error.stack || error.message || ""+error;
 }
 
 //middleware to catch ressource
@@ -189,7 +191,7 @@ const port = process.env.http_port || 3000;
 
 initManifest().then(() => {
     app.listen(port, () => {
-        console.log(`node12 listening on port: ${port}`)
+        console.log(`App listening on port: ${port}`)
     });
 }).catch(err => {
     console.error(err);

@@ -20,7 +20,11 @@ generator:
       - "!/*.json"
       - "!/server.js"
       - "!/index.js"
+      - "!/classes/"
       - "!/listeners/"
       - "!/resources/"
       - "!/services/"
       - "!/views/"
+dev:
+  mongo:
+    tag: 4
