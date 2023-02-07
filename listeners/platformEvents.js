@@ -43,7 +43,7 @@ async function savePlatform(props, event, api) {
         }
     }
     PostStat.fields.forEach(field => {
-        if (field.name in navigation.state) platform[field.name] = navigation.state[field.name];
+        platform[field.name] = (field.name in navigation.state) ? navigation.state[field.name] : true;
     });
     if ("colorHex" in navigation.state) {
         const color = colors.fromHex(navigation.state.colorHex);
