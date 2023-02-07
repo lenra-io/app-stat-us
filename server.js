@@ -3,6 +3,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const app = express();
+const { writeFileSync } = require('fs');
 
 const manifestHandler = require('./index.js');
 const defaultMaxSize = '100kb'; // body-parser default
@@ -182,7 +183,8 @@ const port = process.env.http_port || 3000;
 
 initManifest().then(() => {
     app.listen(port, () => {
-        console.log(`App listening on port: ${port}`)
+        writeFileSync("/tmp/.lock", "\n");
+        console.log(`App listening on port: ${port}`);
     });
 }).catch(err => {
     console.error(err);
