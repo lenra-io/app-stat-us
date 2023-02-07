@@ -83,7 +83,7 @@ function form([platform], { state }) {
                 Flexible.new(
                     Text.new(property.displayName)
                 ),
-                Toggle.new(firstProperty(property.name, false, state, platform))
+                Toggle.new(firstProperty(property.name, true, state, platform))
                     .onPressed(action, { property: property.name })
             )
                 .spacing(16)
