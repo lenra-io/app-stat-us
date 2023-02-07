@@ -176,7 +176,6 @@ function errorToString(error) {
 }
 
 //middleware to catch ressource
-app.get('/*', (_req, res) => res.sendStatus(200));
 app.post('/*', middleware);
 
 const port = process.env.http_port || 3000;
