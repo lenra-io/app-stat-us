@@ -20,16 +20,6 @@ const VIEW_TYPE = "view";
 const MANIFEST_TYPE = "manifest";
 
 app.disable('x-powered-by');
-
-app.use(morgan(function (tokens, req, res) {
-    return [
-        tokens.method(req, res),
-        tokens.url(req, res),
-        'type:', get_req_type(req),
-        tokens.status(req, res),
-        tokens['response-time'](req, res), 'ms'
-    ].join(' ')
-}))
 app.use(function addDefaultContentType(req, res, next) {
     // When no content-type is given, the body element is set to
     // nil, and has been a source of contention for new users.
@@ -181,10 +171,11 @@ async function handleAppListener(req, res) {
  * @returns 
  */
 function errorToString(error) {
-    return error.stack || error.message || ""+error;
+    return error.stack || error.message || "" + error;
 }
 
 //middleware to catch ressource
+app.get('/*', (_req, res) => res.sendStatus(200));
 app.post('/*', middleware);
 
 const port = process.env.http_port || 3000;
