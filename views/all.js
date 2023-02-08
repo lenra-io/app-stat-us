@@ -11,7 +11,7 @@ module.exports = views;
 
 
 function main() {
-  return View.new("app")
+  return View("app")
     .data(navigationService.collection, {
       "user": "@me"
     });

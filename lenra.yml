@@ -1,7 +1,7 @@
 componentsApi: "1.0"
 generator:
   dofigen:
-    from: "docker.io/bitnami/node:16"
+    from: "docker.io/bitnami/node:18"
     workdir: /app
     envs:
       suppress_lock: "true"

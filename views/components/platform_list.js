@@ -1,4 +1,4 @@
-const { colors, padding, borderRadius, Container, Text, Actionable } = require('@lenra/components');
+const { colors, padding, borderRadius, Container, Text, Actionable, Flex, View } = require('@lenra/components');
 const Platform = require('../../classes/Platform.js');
 const { homeNavigation } = require('../../services/navigationService.js');
 
@@ -18,74 +18,51 @@ const defaultBoxShadow = {
  * @returns 
  */
 function platform_list(platforms, props) {
-    let children = platforms.map(platform => {
-        const children = [
-            {
-                type: "view",
-                name: "platform_card",
-                coll: Platform.collection,
-                query: {
-                    _id: platform._id
-                }
-            },
-            {
-                type: "container",
-                padding: { top: 16 },
-                child: {
-                    type: "text",
-                    value: platform.name,
-                    textAlign: "center",
-                },
-            },
-        ];
-        if (platform.account) {
-            children.push({
-                type: "text",
-                value: `@${platform.account}`,
-                textAlign: "center",
-                style: {
-                    fontSize: 12,
-                }
-            });
-        }
-        // {
-        //     type: "view",
-        //     name: "updateStatus",
-        //     coll: PostStat.collection,
-        //     query: {
-        //         post: post._id
-        //     },
-        //     props: {
-        //         date: post.date,
-        //     }
-        // }
-        return {
-            type: "container",
-            constraints: { maxWidth: 64 },
-            child: {
-                type: "flex",
-                mainAxisAlignment: "start",
-                crossAxisAlignment: "stretch",
-                direction: "vertical",
-                children
+    const flex = Flex(
+        ...platforms.map(platform => {
+            const children = [
+                View("platform_card")
+                    .data(Platform.collection, {
+                        _id: platform._id
+                    })
+                ,
+                //     View("updateStatus")
+                //         .data(PlatformStat.collection, {
+                //             post: platform._id
+                //         }),
+                Container(
+                    Text(platform.name)
+                        .textAlign("center")
+                ).padding({ top: 16 })
+            ];
+            if (platform.account) {
+                children.push(
+                    Text(`@${platform.account}`)
+                        .textAlign("center")
+                        .style({
+                            fontSize: 12,
+                        })
+                );
             }
-        };
-    });
-    if (props && props.add) children.push(card("+", 0xFFAAAAAA, {}, {
+            return Container(
+                Flex(...children)
+                    .direction("vertical")
+                    .crossAxisAlignment("stretch")
+            ).maxWidth(64);
+        })
+    )
+        .spacing(24)
+        .mainAxisAlignment("center")
+        .padding(padding.symmetric(32, 16))
+        .fillParent(true)
+        .scroll(true)
+    if (props && props.add) children.push(card("+", 0xFFDCDCDC, {}, {
         action: "pushState",
         props: {
             page: "edit_platform"
         }
     }));
-    return {
-        type: "flex",
-        spacing: 24,
-        mainAxisAlignment: "center",
-        padding: padding.all(16),
-        fillParent: true,
-        scroll: true,
-        children
-    }
+    return flex;
 }
 
 /**
@@ -193,8 +170,8 @@ function card(name, color, style, onPressed) {
     const size = style.size || 64;
     const boxShadow = "boxShadow" in style ? style.boxShadow : defaultBoxShadow;
     const textColor = color ? colors.betterContrast(color) : 0xFF000000;
-    let child = Container.new(
-        Text.new(name.substring(0, 1))
+    let child = Container(
+        Text(name.substring(0, 1))
             .style({
                 color: textColor,
                 fontWeight: "bold",
@@ -208,7 +185,7 @@ function card(name, color, style, onPressed) {
         .borderRadius(borderRadius.all(size / 8))
         .boxShadow(boxShadow);
     if (onPressed) {
-        child = Actionable.new(child)
+        child = Actionable(child)
             .onPressed(onPressed.action, onPressed.props);
     }
     return child;

@@ -4,8 +4,8 @@ const Post = require('../../classes/Post.js');
 const navigationService = require('../../services/navigationService.js');
 
 function menu(data, props) {
-    const flex = Flex.new(
-        View.new("ariane")
+    const flex = Flex(
+        View("ariane")
             .data(navigationService.collection, {
                 user: "@me"
             })
@@ -20,7 +20,7 @@ function menu(data, props) {
             type: "button"
         });
     }
-    return Container.new(flex)
+    return Container(flex)
         .color(colors.Colors.white)
         .boxShadow({
             blurRadius: 8,
@@ -47,7 +47,7 @@ function ariane([navigation], _props) {
             },
         });
     }
-    return Flex.new(
+    return Flex(
         ...navigation.history.flatMap((state, i) => {
             return [
                 fillViewPageName(state, {
@@ -60,7 +60,7 @@ function ariane([navigation], _props) {
                         }
                     }
                 }),
-                Text.new("/")
+                Text("/")
             ]
         }),
         fillViewPageName(navigation.state, {
@@ -87,7 +87,7 @@ function fillViewPageName(state, view) {
         case 'home':
             return fillViewText(view, 'Stat Us');
         case 'platform':
-            return View.new("platform_title")
+            return View("platform_title")
                 .data(Platform.collection, {
                     _id: state.platform
                 })
@@ -96,7 +96,7 @@ function fillViewPageName(state, view) {
                     onPressed: view.type == "button" ? view.onPressed : null
                 });
         case 'post':
-            return View.new("post_title")
+            return View("post_title")
                 .data(Post.collection, {
                     _id: state.post
                 })
@@ -141,5 +141,5 @@ function fillViewText(view, text) {
 module.exports = {
     menu,
     ariane,
-    defaultMenu: (_data, _props) => View.new("menu"),
+    defaultMenu: (_data, _props) => View("menu"),
 }

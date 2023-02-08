@@ -3,9 +3,9 @@
 const { Flex, View } = require("@lenra/components")
 
 module.exports = (data, props) => {
-  return Flex.new(
-    View.new("menu"),
-    View.new("home")
+  return Flex(
+    View("menu"),
+    View("home")
   )
     .direction("vertical")
     .scroll(true)

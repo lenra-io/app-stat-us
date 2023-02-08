@@ -6,9 +6,9 @@ const { colors, Flex, Icon, Text } = require("@lenra/components");
  * @returns 
  */
 function url([doc], props) {
-    return Flex.new(
-        Icon.new("link").size(16),
-        Text.new(doc.url)
+    return Flex(
+        Icon("link").size(16),
+        Text(doc.url)
             .style({
                 color: colors.LenraColors.bluePulse,
             })

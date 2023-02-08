@@ -8,7 +8,7 @@ const { View } = require("@lenra/components");
  * @returns 
  */
 function content(_data, _props) {
-    return Text.new("Add platform stats page");
+    return Text("Add platform stats page");
 }
 
 /**
@@ -17,7 +17,7 @@ function content(_data, _props) {
  * @returns 
  */
 function menu(_data, _props) {
-    return View.new("menu")
+    return View("menu")
         .props({
             mainAction: {
                 text: "New game",

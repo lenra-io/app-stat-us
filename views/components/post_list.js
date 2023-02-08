@@ -1,4 +1,4 @@
-const { border, Container } = require('@lenra/components');
+const { border, Container, View, Button, Flex, Actionable, Text, Flexible, padding } = require('@lenra/components');
 const Platform = require('../../classes/Platform.js');
 const Post = require('../../classes/Post.js');
 const PostStat = require('../../classes/PostStat.js');
@@ -18,46 +18,27 @@ function post_list(posts, props) {
         .sort((a, b) => b.date - a.date);
     if (limit) filteredPosts = filteredPosts.slice(0, limit);
     let children = filteredPosts.map(post => {
-        return {
-            type: "view",
-            name: "post_card",
-            coll: Post.collection,
-            query: {
+        return View("post_card")
+            .data(Post.collection, {
                 _id: post._id
-            }
-        }
+            });
     });
-    if (props.add) children.unshift({
-        type: "button",
-        text: "New post",
-        onPressed: {
-            action: "pushState",
-            props: {
-                page: "edit_post",
-                platform: props.platform,
-            }
-        }
-    });
-    if (props.pagination && limit < posts.length) children.push({
-        type: "button",
-        text: "+",
-        mainStyle: "secondary",
-        onPressed: {
-            action: "setStateProperty",
-            props: {
-                property: "limit",
-                value: limit + 5
-            }
-        }
-    });
-    return {
-        type: "flex",
-        spacing: 16,
-        mainAxisAlignment: "start",
-        crossAxisAlignment: "stretch",
-        direction: "vertical",
-        children
-    }
+    if (props.add) children.unshift(Button("New post")
+        .onPressed("pushState", {
+            page: "edit_post",
+            platform: props.platform,
+        })
+    );
+    if (props.pagination && limit < posts.length) children.push(Button("+")
+        .onPressed("setStateProperty", {
+            property: "limit",
+            value: limit + 5
+        })
+    );
+    return Flex(...children)
+        .spacing(16)
+        .crossAxisAlignment("stretch")
+        .direction("vertical");
 }
 
 /**
@@ -69,95 +50,56 @@ function post_list(posts, props) {
 function post_card([post], props) {
     let name = post.name;
     if (post.channel) name = `${post.channel} - ${name}`;
-    return {
-        type: "actionable",
-        child: Container.card(
-            {
-                type: "flex",
-                spacing: 16,
-                mainAxisAlignment: "spaceEvenly",
-                direction: "vertical",
-                padding: {
-                    left: 16,
-                    right: 16
-                },
-                children: [
-                    {
-                        type: "flex",
-                        spacing: 16,
-                        children: [
-                            {
-                                type: "view",
-                                name: "platform_card",
-                                coll: Platform.collection,
-                                query: {
-                                    _id: post.platform
-                                },
-                                props: {
-                                    size: 24,
-                                    boxShadow: {}
-                                }
-                            },
-                            {
-                                type: "flexible",
-                                child: {
-                                    type: "text",
-                                    style: {
-                                        fontSize: 16,
-                                        fontWeight: "bold",
-                                    },
-                                    value: name
-                                }
-                            },
-                            {
-                                type: "view",
-                                name: "updateStatus",
-                                coll: PostStat.collection,
-                                query: {
-                                    post: post._id
-                                },
-                                props: {
-                                    date: post.date,
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        type: "text",
-                        value: `type: ${Post.types.find(type => type.name == post.type)?.displayName || "Not defined"}`
-                    },
-                    url([post], {}),
-                    {
-                        type: "view",
-                        name: "post_stats",
-                        coll: PostStat.collection,
-                        query: {
-                            post: post._id,
-                        },
-                        props: {
-                            limit: 1,
-                            postDate: post.date,
-                        }
-                    }
-                ]
-            }
-        ),
-        onPressed: navigateToPostListener(post.platform, post._id),
-    };
+    return Actionable(
+        Container.card(
+            Flex(
+                Flex(
+                    View("platform_card")
+                        .data(Platform.collection, {
+                            _id: post.platform
+                        })
+                        .props({
+                            size: 24,
+                            boxShadow: {}
+                        }),
+                    Flexible(
+                        Text(name)
+                            .style({
+                                fontSize: 16,
+                                fontWeight: "bold",
+                            })
+                    ),
+                    View("updateStatus")
+                        .data(PostStat.collection, {
+                            post: post._id
+                        })
+                        .props({
+                            date: post.date,
+                        })
+                ).spacing(16),
+                Text(`type: ${Post.types.find(type => type.name == post.type)?.displayName || "Not defined"}`),
+                url([post], {}),
+                View("post_stats")
+                    .data(PostStat.collection, {
+                        post: post._id,
+                    })
+                    .props({
+                        limit: 1,
+                        postDate: post.date,
+                    })
+            )
+                .spacing(16)
+                .mainAxisAlignment("spaceEvenly")
+                .direction("vertical")
+                .padding(padding.symmetric(16))
+        )
+    ).onPressed("replaceNavigation", postNavigation(post.platform, post._id));
 }
 
 function post_title([post], props) {
-    let child = {
-        type: "text",
-        value: post.name
-    };
-    if (props.padding) {
-        child = {
-            type: "container",
-            padding: props.padding,
-            child,
-        };
-    }
+    let child = Text(post.name);
+    if (props.padding)
+        child = Container(child).padding(props.padding);
     if (props.onPressed) {
         child = {
             type: "actionable",
@@ -166,13 +108,6 @@ function post_title([post], props) {
         };
     }
     return child;
-}
-
-function navigateToPostListener(platformId, postId) {
-    return {
-        action: "replaceNavigation",
-        props: postNavigation(platformId, postId),
-    }
 }
 
 function postNavigation(platformId, postId) {

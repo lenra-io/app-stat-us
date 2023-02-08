@@ -1,4 +1,4 @@
-const { colors } = require("@lenra/components");
+const { colors, Text, Icon, Flex } = require("@lenra/components");
 const { LenraColors } = colors;
 
 const defaultDelay = 7 * 24 * 3600 * 1000; // 7 days
@@ -23,27 +23,18 @@ function updateStatus(docs, props) {
         color = LenraColors.yellowPulse;
         text = "Old";
     }
-    return {
-        type: "flex",
-        spacing: 8,
-        crossAxisAlignment: "center",
-        children: [
-            {
-                type: "text",
-                value: text,
-                style: {
-                    color,
-                    fontSize: size,
-                },
-            },
-            {
-                type: "icon",
-                value: "circle",
-                size,
+    return Flex(
+        Text(text)
+            .style({
                 color,
-            },
-        ]
-    };
+                fontSize: size,
+            }),
+        Icon("circle")
+            .size(size)
+            .color(color)
+    )
+        .spacing(8)
+        .crossAxisAlignment("center");
 }
 
 module.exports = {

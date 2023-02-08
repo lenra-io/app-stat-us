@@ -1,6 +1,6 @@
 'use strict'
 
-const { View, colors, Flex, TextField, Button, Icon, Flexible, Text, Toggle } = require("@lenra/components");
+const { View, colors, Flex, TextField, Button, Icon, Flexible, Text, Toggle, padding } = require("@lenra/components");
 const Platform = require("../../classes/Platform");
 const PostStat = require("../../classes/PostStat");
 const { defaultMenu } = require("../components/menu");
@@ -12,7 +12,7 @@ const { firstProperty } = require("../utils/data");
  * @returns 
  */
 function content(_data, props) {
-    const child = View.new('edit_platform_form').props(props);
+    const child = View('edit_platform_form').props(props);
     if (props.state.platform) {
         child.data(Platform.collection, {
             _id: props.state.platform
@@ -32,8 +32,8 @@ function form([platform], { state }) {
     const color = colors.fromHex(colorHex);
     const textColor = color ? colors.betterContrast(color) : undefined;
     const action = platform ? "updatePlatform" : "setStateProperty";
-    const flex = Flex.new(
-        TextField.new(firstProperty("name", "", state, platform))
+    const flex = Flex(
+        TextField(firstProperty("name", "", state, platform))
             .autofocus(true)
             .style({
                 decoration: {
@@ -41,7 +41,7 @@ function form([platform], { state }) {
                 },
             })
             .onChanged(action, { property: "name" }),
-        TextField.new(colorHex || "")
+        TextField(colorHex || "")
             .style({
                 textStyle: {
                     color: textColor,
@@ -54,7 +54,7 @@ function form([platform], { state }) {
                 },
             })
             .onChanged(action, { property: "colorHex" }),
-        TextField.new(firstProperty("url", "", state, platform))
+        TextField(firstProperty("url", "", state, platform))
             .style({
                 decoration: {
                     labelText: "Page URL",
@@ -62,7 +62,7 @@ function form([platform], { state }) {
                 },
             })
             .onChanged(action, { property: "url" }),
-        TextField.new(firstProperty("account", "", state, platform))
+        TextField(firstProperty("account", "", state, platform))
             .style({
                 decoration: {
                     labelText: "Platform account name",
@@ -72,18 +72,19 @@ function form([platform], { state }) {
             .onChanged(action, { property: "account" }),
     )
         .spacing(16)
+        .padding(padding.all(32))
         .mainAxisAlignment("start")
         .crossAxisAlignment("stretch")
         .direction("vertical");
 
     PostStat.fields.forEach(property =>
         flex.addChild(
-            Flex.new(
-                Icon.new(property.icon),
-                Flexible.new(
-                    Text.new(property.displayName)
+            Flex(
+                Icon(property.icon),
+                Flexible(
+                    Text(property.displayName)
                 ),
-                Toggle.new(firstProperty(property.name, true, state, platform))
+                Toggle(firstProperty(property.name, true, state, platform))
                     .onPressed(action, { property: property.name })
             )
                 .spacing(16)
@@ -91,7 +92,7 @@ function form([platform], { state }) {
         )
     );
 
-    if (!platform) flex.addChild(Button.new("Save").onPressed("savePlatform"));
+    if (!platform) flex.addChild(Button("Save").onPressed("savePlatform"));
     return flex;
 }
 

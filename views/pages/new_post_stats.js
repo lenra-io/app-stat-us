@@ -1,6 +1,6 @@
 'use strict'
 
-const { View, TextField, Button, Form, Flex } = require("@lenra/components");
+const { View, TextField, Button, Form, Flex, padding } = require("@lenra/components");
 const Platform = require("../../classes/Platform");
 const PostStat = require("../../classes/PostStat");
 const { defaultMenu } = require("../components/menu");
@@ -11,7 +11,7 @@ const { defaultMenu } = require("../components/menu");
  * @returns 
  */
 function content(_data, props) {
-    return View.new("new_post_stats_form")
+    return View("new_post_stats_form")
         .data(Platform.collection, {
             _id: props.state.platform,
         });
@@ -28,12 +28,12 @@ function form([platform], _props) {
     const str = date.toISOString();
     const dateStr = str.substring(0, 10);
     const timeStr = str.substring(11, 19);
-    return Form.new(
-        Flex.new(
+    return Form(
+        Flex(
             ...PostStat.fields
                 .filter(field => platform[field.name])
                 .map((field, i) =>
-                    TextField.new("")
+                    TextField("")
                         .name(field.name)
                         .autofocus(i == 0)
                         .style({
@@ -46,7 +46,7 @@ function form([platform], _props) {
                             },
                         })
                 ),
-            TextField.new(dateStr)
+            TextField(dateStr)
                 .name("date")
                 .style({
                     decoration: {
@@ -58,7 +58,7 @@ function form([platform], _props) {
                         }
                     },
                 }),
-            TextField.new(timeStr)
+            TextField(timeStr)
                 .name("time")
                 .style({
                     decoration: {
@@ -70,9 +70,10 @@ function form([platform], _props) {
                         }
                     },
                 }),
-            Button.new("Save").submit(true)
+            Button("Save").submit(true)
         )
             .spacing(16)
+            .padding(padding.all(32))
             .crossAxisAlignment("stretch")
             .direction("vertical")
     ).onSubmit("savePostStat");

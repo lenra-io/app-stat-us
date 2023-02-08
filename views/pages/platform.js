@@ -1,6 +1,6 @@
 'use strict'
 
-const { View, Button, Flexible, Flex } = require("@lenra/components");
+const { View, Button, Flexible, Flex, padding } = require("@lenra/components");
 const Platform = require("../../classes/Platform");
 const Post = require("../../classes/Post");
 
@@ -12,10 +12,10 @@ const pagination = 5;
  * @returns 
  */
 function content(_data, { state }) {
-    return Flex.new(
-        Flex.new(
-            Flexible.new(
-                View.new("platform_title")
+    return Flex(
+        Flex(
+            Flexible(
+                View("platform_title")
                     .data(Platform.collection, {
                         _id: state.platform
                     })
@@ -25,7 +25,7 @@ function content(_data, { state }) {
                         fontWeight: 'bold',
                     })
             ),
-            Button.new("Edit")
+            Button("Edit")
                 .mainStyle("secondary")
                 .onPressed("pushState", {
                     page: "edit_platform",
@@ -34,11 +34,11 @@ function content(_data, { state }) {
         )
             .spacing(16)
             .crossAxisAlignment("center"),
-        View.new("url")
+        View("url")
             .data(Platform.collection, {
                 _id: state.platform
             }),
-        View.new("post_list")
+        View("post_list")
             .data(Post.collection, {
                 platform: state.platform
             })
@@ -50,6 +50,7 @@ function content(_data, { state }) {
             })
     )
         .spacing(16)
+        .padding(padding.all(32))
         .crossAxisAlignment("stretch")
         .direction("vertical")
 }
@@ -60,7 +61,7 @@ function content(_data, { state }) {
  * @returns 
  */
 function menu(_data, { state }) {
-    return View.new("menu")
+    return View("menu")
         .props({
             mainAction: {
                 text: "New post",
