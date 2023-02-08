@@ -56,12 +56,14 @@ function platform_list(platforms, props) {
         .padding(padding.symmetric(32, 16))
         .fillParent(true)
         .scroll(true)
-    if (props && props.add) children.push(card("+", 0xFFDCDCDC, {}, {
-        action: "pushState",
-        props: {
-            page: "edit_platform"
-        }
-    }));
+    if (props && props.add) flex.addChild(
+        card("+", 0xFFDCDCDC, {}, {
+            action: "pushState",
+            props: {
+                page: "edit_platform"
+            }
+        })
+    );
     return flex;
 }
 
