@@ -1,8 +1,10 @@
 componentsApi: "1.0"
 generator:
   dofigen:
-    from: "docker.io/bitnami/node:16"
+    from: "docker.io/bitnami/node:18"
     workdir: /app
+    envs:
+      suppress_lock: "true"
     root:
       script:
         - chown -R 1000 /app
@@ -15,6 +17,11 @@ generator:
       - server.js
     ports:
       - 3000
+    healthcheck:
+      cmd: curl --fail http://localhost:8080/_/health
+      start: 3s
+      interval: 3s
+      timeout: 1s
     ignores:
       - "**"
       - "!/*.json"

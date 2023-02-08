@@ -1,6 +1,6 @@
 'use strict'
 
-const { View, Flex, Flexible, Button, Text } = require("@lenra/components");
+const { View, Flex, Flexible, Button, Text, padding } = require("@lenra/components");
 const Platform = require("../../classes/Platform");
 const Post = require("../../classes/Post");
 const PostStat = require("../../classes/PostStat");
@@ -14,10 +14,10 @@ const pagination = 10;
  * @returns 
  */
 function content(_data, { state }) {
-    return Flex.new(
-        Flex.new(
-            Flexible.new(
-                View.new("platform_title")
+    return Flex(
+        Flex(
+            Flexible(
+                View("platform_title")
                     .data(Platform.collection, {
                         _id: state.platform
                     })
@@ -27,7 +27,7 @@ function content(_data, { state }) {
                         fontWeight: 'bold',
                     })
             ),
-            Button.new("Edit")
+            Button("Edit")
                 .mainStyle("secondary")
                 .onPressed("pushState", {
                     page: "edit_post",
@@ -37,11 +37,11 @@ function content(_data, { state }) {
         )
             .spacing(16)
             .crossAxisAlignment("center"),
-        View.new("post_infos")
+        View("post_infos")
             .data(Post.collection, {
                 _id: state.post
             }),
-        View.new("post_stats")
+        View("post_stats")
             .data(PostStat.collection, {
                 post: state.post,
             })
@@ -51,6 +51,7 @@ function content(_data, { state }) {
             })
     )
         .spacing(32)
+        .padding(padding.all(32))
         .crossAxisAlignment("stretch")
         .direction("vertical")
 }
@@ -63,13 +64,13 @@ function content(_data, { state }) {
 function infos([post], props) {
     let name = post.name;
     if (post.channel) name = `${post.channel} - ${name}`;
-    return Flex.new(
-        Text.new(name)
+    return Flex(
+        Text(name)
             .style({
                 fontSize: 24,
                 fontWeight: "bold",
             }),
-        Text.new(`type: ${Post.types.find(type => type.name == post.type)?.displayName || "Not defined"}`),
+        Text(`type: ${Post.types.find(type => type.name == post.type)?.displayName || "Not defined"}`),
         url([post], {}),
     )
         .spacing(16)
@@ -82,7 +83,7 @@ function infos([post], props) {
  * @returns 
  */
 function menu(_data, { state }) {
-    return View.new("menu")
+    return View("menu")
         .props({
             mainAction: {
                 text: "Add stats",

@@ -1,4 +1,4 @@
-const { padding, colors } = require('@lenra/components');
+const { padding, colors, Text, Container, Wrap, Flex, Icon } = require('@lenra/components');
 const PostStat = require('../../classes/PostStat.js');
 
 /**
@@ -8,11 +8,8 @@ const PostStat = require('../../classes/PostStat.js');
  */
 function post_stats(stats, props) {
     if (stats.length == 0) {
-        return {
-            type: "text",
-            value: "No data yet",
-            textAlign: "center",
-        }
+        return Text("No data yet")
+            .textAlign("center");
     }
     const limit = props.limit || props.pagination;
     let filteredStats = stats
@@ -23,90 +20,67 @@ function post_stats(stats, props) {
         const date = new Date(stat.date);
         let dateStr = date.toISOString();
         dateStr = `${dateStr.substring(0, 10)} ${dateStr.substring(11, 19)}`
-        return {
-            type: "container",
-            padding: padding.symmetric(0, 8),
-            child: {
-                type: "wrap",
-                spacing: 16,
-                runSpacing: 8,
-                children: [
-                    {
-                        type: "text",
-                        value: dateStr,
-                    },
-                    ...fields.map(field => fieldValue(field, stat, stats[i + 1]))
-                ],
-            }
-        };
+        return Container(
+            Wrap(
+                Text(dateStr),
+                ...fields.map(field => fieldValue(field, stat, stats[i + 1]))
+            )
+                .spacing(16)
+                .runSpacing(8)
+        ).padding(padding.symmetric(0, 8));
     });
     if (children.length == 1) return children[0];
-    return {
-        type: "flex",
-        spacing: 16,
-        mainAxisAlignment: "start",
-        crossAxisAlignment: "stretch",
-        direction: "vertical",
-        children
-    };
+    return Flex(...children)
+        .spacing(16)
+        .crossAxisAlignment("stretch")
+        .direction("vertical");
 }
 
 function fieldValue(field, stat, previousStat) {
     const isManaged = field.name in stat;
-    const children = [];
+    const children = [
+        Icon(field.icon)
+            .size(16)
+            .semanticLabel(field.displayName),
+        Text(isManaged ? `${stat[field.name]}` : '-')
+    ];
     // Don't seems to be managed yet
     if (previousStat && isManaged && field.name in previousStat) {
         const diff = stat[field.name] - previousStat[field.name];
-        let diffText = `${diff}`;
-        let diffColor = colors.LenraColors.redPulse;
         if (diff == 0) {
-            diffText = ' - ';
-            diffColor = colors.LenraColors.yellowPulse;
+            children.push(
+                Icon("minimize")
+                    .color(colors.LenraColors.yellowPulse)
+                    .size(12)
+            );
         }
-        else if (diff > 0) {
-            diffText = '+' + diffText;
-            diffColor = colors.LenraColors.greenPulse;
-        }
-        children.push(
-            {
-                type: "text",
-                value: " (",
-            },
-            {
-                type: "text",
-                value: diffText,
-                style: {
-                    color: diffColor,
-                },
-            },
-            {
-                "type": "text",
-                "value": ")",
-            }
-        );
-    }
-    return {
-        type: "container",
-        constraints: { minWidth: 88 },
-        child: {
-            type: "flex",
-            spacing: 8,
-            crossAxisAlignment: "center",
-            children: [
-                {
-                    type: "icon",
-                    value: field.icon,
-                    size: 16,
-                },
-                {
-                    type: "text",
-                    value: isManaged ? `${stat[field.name]}${children.map(c => c.value).join('')}` : '-',
-                    // Not managed by the client
-                    // children,
-                }
-            ]
+        else {
+            const negative = diff > 0 && field.negative || diff < 0 && !field.negative;
+            const percent = previousStat[field.name] == 0 ? 100 : Math.round(100 * Math.abs(diff) / previousStat[field.name]);
+            const icon = negative
+                ? Icon("arrow_downward").color(colors.LenraColors.redPulse)
+                : Icon("arrow_upward").color(colors.LenraColors.greenPulse)
+            icon.size(12);
+            children.push(
+                Flex(
+                    icon,
+                    Text(`${percent}%`)
+                        .style({
+                            fontSize: 12
+                        })
+                )
+                    .spacing(2)
+                    .crossAxisAlignment("center")
+            );
         }
     }
+    return Container(
+        Flex(
+            ...children
+        )
+            .spacing(8)
+            .crossAxisAlignment("end")
+    ).minWidth(88);
 }
 
 module.exports = {

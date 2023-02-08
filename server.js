@@ -3,6 +3,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const app = express();
+const { writeFileSync } = require('fs');
 
 const manifestHandler = require('./index.js');
 const defaultMaxSize = '100kb'; // body-parser default
@@ -20,16 +21,6 @@ const VIEW_TYPE = "view";
 const MANIFEST_TYPE = "manifest";
 
 app.disable('x-powered-by');
-
-app.use(morgan(function (tokens, req, res) {
-    return [
-        tokens.method(req, res),
-        tokens.url(req, res),
-        'type:', get_req_type(req),
-        tokens.status(req, res),
-        tokens['response-time'](req, res), 'ms'
-    ].join(' ')
-}))
 app.use(function addDefaultContentType(req, res, next) {
     // When no content-type is given, the body element is set to
     // nil, and has been a source of contention for new users.
@@ -181,7 +172,7 @@ async function handleAppListener(req, res) {
  * @returns 
  */
 function errorToString(error) {
-    return error.stack || error.message || ""+error;
+    return error.stack || error.message || "" + error;
 }
 
 //middleware to catch ressource
@@ -191,7 +182,8 @@ const port = process.env.http_port || 3000;
 
 initManifest().then(() => {
     app.listen(port, () => {
-        console.log(`App listening on port: ${port}`)
+        writeFileSync("/tmp/.lock", "\n");
+        console.log(`App listening on port: ${port}`);
     });
 }).catch(err => {
     console.error(err);
