@@ -1,4 +1,4 @@
-const { colors, padding, borderRadius, Container, Text, Actionable, Flex, View } = require('@lenra/components');
+const { colors, padding, borderRadius, Container, Text, Actionable, Flex, View, MenuItem, Menu, DropdownButton } = require('@lenra/components');
 const Platform = require('../../classes/Platform.js');
 const { homeNavigation } = require('../../services/navigationService.js');
 
@@ -73,37 +73,19 @@ function platform_list(platforms, props) {
  */
 function platform_selector(platforms, props) {
     const current = platforms.find(p => p._id == props.platform)
-    let children = platforms.map(platform => {
-        return {
-            type: "menuItem",
-            text: platformName(platform),
-            // icon: {
-            //     type: "view",
-            //     name: "platform_card",
-            //     coll: Platform.collection,
-            //     query: {
-            //         _id: platform._id
-            //     }
-            // },
-            isSelected: platform == current,
-            onPressed: {
-                action: "setStateProperty",
-                props: {
-                    property: "platform",
-                    value: platform._id,
-                }
-            }
-        }
-    });
-    const child = {
-        type: "menu",
-        children
-    };
-    return {
-        type: "dropdownButton",
-        text: current ? platformName(current) : "Select a platform",
-        child,
-    };
+    return DropdownButton(
+        current ? platformName(current) : "Select a platform",
+        Menu(
+            ...platforms.map(platform =>
+                MenuItem(platformName(platform))
+                    .isSelected(platform == current)
+                    .onPressed("setStateProperty", {
+                        property: "platform",
+                        value: platform._id,
+                    })
+            )
+        ).toJSON()
+    );
 }
 
 /**
@@ -128,33 +110,25 @@ function platform_card([platform], props) {
 function platform_title([platform], props) {
     const onPressed = "onPressed" in props ? props.onPressed : navigateToPlatformListener(platform._id);
     const size = props.size || 24;
-    let child = {
-        type: "flex",
-        spacing: 8,
-        padding: props.padding,
-        children: [
-            {
-                type: "view",
-                name: "platform_card",
-                coll: Platform.collection,
-                query: {
-                    _id: platform._id
-                },
-                props: {
-                    size,
-                    boxShadow: {},
-                    onPressed: null,
-                }
-            }, {
-                type: "text",
-                value: platform.name,
-                style: {
-                    fontWeight: props.fontWeight,
-                    fontSize: size * 2 / 3,
-                }
-            }
-        ]
-    };
+    let child = Flex(
+        View("platform_card")
+            .data(Platform.collection, {
+                _id: platform._id
+            })
+
+            .props({
+                size,
+                boxShadow: {},
+                onPressed: null,
+            }),
+        Text(platform.name)
+            .style({
+                fontWeight: props.fontWeight,
+                fontSize: size * 2 / 3,
+            })
+    )
+        .spacing(8)
+        .padding(props.padding);
     if (onPressed) {
         child = {
             type: "actionable",
