@@ -17,6 +17,7 @@ async function savePost(_props, event, api) {
             post[key] = event.value[key];
         }
     }
+    if ("type" in navigation.state) post.type = navigation.state.type;
     post.name = post.name?.trim();
     post.platform = navigation.state.platform;
     post.url = post.url?.trim();
@@ -28,6 +29,7 @@ async function savePost(_props, event, api) {
     // check required fields
     if (!post.name) errors.push({ field: "name", message: "The post name is required" });
     else if (post.name.length < 3) errors.push({ field: "name", message: "The post name must contain at least 3 characters" });
+    if (!post.type) errors.push({ field: "type", message: "The post type is required" });
     if (!post.url) errors.push({ field: "url", message: "The post url is required" });
     else if (!urlRegex.test(post.url)) errors.push({ field: "url", message: "The post url does not seem to be correct" });
     if (!dateValid) errors.push({ field: "date", message: "The date format is not correct" });
