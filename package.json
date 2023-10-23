@@ -3,13 +3,18 @@
   "version": "1.0.0",
   "description": "A Lenra app to analyse your stats from your social media posts",
   "main": "index.js",
+  "type": "module",
   "scripts": {
+    "start": "node node_modules/@lenra/app/dist/bin/app-lenra.js start",
+    "index": "node node_modules/@lenra/app/dist/bin/app-lenra.js index",
+    "postinstall": "npm run index",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "keywords": [],
   "author": "Lenra",
   "license": "MIT",
   "dependencies": {
+    "@lenra/app": "^1.0.0-beta.12",
     "@lenra/components": "^1.0.0-beta.3",
     "axios": "^0.27.1",
     "express": "^4.18.1",
