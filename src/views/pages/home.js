@@ -1,6 +1,6 @@
 'use strict'
 
-import { View, Flex, Container, padding } from "@lenra/components";
+import { View, Flex, Container, padding } from "@lenra/app";
 import Platform from "../../classes/Platform.js";
 import Post from "../../classes/Post.js";
 
@@ -11,7 +11,7 @@ const pagination = 5;
  * @param {*} props
  * @returns
  */
-export function content(_data, { state }) {
+export function home(_data, { state }) {
     console.log("state", state);
     return Flex(
         View("platform_list")
@@ -40,7 +40,7 @@ export function content(_data, { state }) {
  * @param {*} props
  * @returns
  */
-export function menu(_data, _props) {
+export function homeMenu(_data, _props) {
     return View("menu")
         .props({
             mainAction: {

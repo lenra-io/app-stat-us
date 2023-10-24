@@ -1,6 +1,6 @@
 'use strict'
 
-import { Text, Flex, View, Container, padding, Stack, Actionable, colors } from '@lenra/components';
+import { Text, Flex, View, Container, padding, Stack, Actionable, colors } from '@lenra/app';
 
 /**
  * @param {Navigation[]} navigations

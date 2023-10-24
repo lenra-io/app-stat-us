@@ -1,6 +1,6 @@
 'use strict'
 
-import { View, colors, Flex, TextField, Button, Icon, Flexible, Text, Toggle, padding } from "@lenra/components";
+import { View, colors, Flex, TextField, Button, Icon, Flexible, Text, Toggle, padding } from "@lenra/app";
 import { collection } from "../../classes/Platform.js";
 import { fields } from "../../classes/PostStat.js";
 import { defaultMenu } from "../components/menu.js";
@@ -11,7 +11,7 @@ import { firstProperty } from "../utils/data.js";
  * @param {*} props
  * @returns
  */
-export function content(_data, props) {
+export function editPlatform(_data, props) {
     const child = View('edit_platform_form').props(props);
     if (props.state.platform) {
         child.data(collection, {
@@ -27,7 +27,7 @@ export function content(_data, props) {
  * @param {{state: any}} param1
  * @returns
  */
-export function form([platform], { state }) {
+export function editPlatformForm([platform], { state }) {
     const colorHex = state?.colorHex || colors.toHex(platform?.color);
     const color = colors.fromHex(colorHex);
     const textColor = color ? colors.betterContrast(color) : undefined;
@@ -96,4 +96,4 @@ export function form([platform], { state }) {
     return flex;
 }
 
-export const menu = defaultMenu;
+export const editPlatformMenu = defaultMenu;

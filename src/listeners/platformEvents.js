@@ -1,4 +1,4 @@
-import { colors } from '@lenra/components';
+import { colors } from '@lenra/app';
 import Platform, { collection } from '../classes/Platform.js';
 import { fields } from '../classes/PostStat.js';
 import { updateDoc, createDoc, getDoc } from '../services/api.js';

@@ -1,6 +1,6 @@
 'use strict'
 
-import { View, Form, Flex, TextField, MenuItem, DropdownButton, Menu, Icon, Button, padding } from "@lenra/components";
+import { View, Form, Flex, TextField, MenuItem, DropdownButton, Menu, Icon, Button, padding } from "@lenra/app";
 import { collection } from "../../classes/Platform.js";
 import { collection as _collection, types } from "../../classes/Post.js";
 import { defaultMenu } from "../components/menu.js";
@@ -11,7 +11,7 @@ import { firstProperty } from "../utils/data.js";
  * @param {*} props
  * @returns
  */
-export function content(_data, props) {
+export function editPost(_data, props) {
     const child = View('edit_post_form')
         .props(props);
     if (props.state.post) {
@@ -26,7 +26,7 @@ export function content(_data, props) {
  * @param {{state: any}} param1
  * @returns
  */
-export function form([post], { state }) {
+export function editPostForm([post], { state }) {
     const date = post ? new Date(post.date) : new Date();
     const str = date.toISOString();
     const dateStr = state.date || str.substring(0, 10);
@@ -116,4 +116,4 @@ function post_type_selector(type) {
     );
 }
 
-export const menu = defaultMenu;
+export const editPostMenu = defaultMenu;

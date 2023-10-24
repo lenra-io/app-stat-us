@@ -1,4 +1,4 @@
-import { colors, padding, borderRadius, Container, Text, Actionable, Flex, View, MenuItem, Menu, DropdownButton } from '@lenra/components';
+import { colors, padding, borderRadius, Container, Text, Actionable, Flex, View, MenuItem, Menu, DropdownButton } from '@lenra/app';
 import { collection } from '../../classes/Platform.js';
 import { homeNavigation } from '../../services/navigationService.js';
 

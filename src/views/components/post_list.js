@@ -1,4 +1,4 @@
-import { border, Container, View, Button, Flex, Actionable, Text, Flexible, padding } from '@lenra/components';
+import { border, Container, View, Button, Flex, Actionable, Text, Flexible, padding } from '@lenra/app';
 import { collection } from '../../classes/Platform.js';
 import { collection as _collection, types } from '../../classes/Post.js';
 import { collection as __collection } from '../../classes/PostStat.js';

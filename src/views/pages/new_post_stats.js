@@ -1,6 +1,6 @@
 'use strict'
 
-import { View, TextField, Button, Form, Flex, padding } from "@lenra/components";
+import { View, TextField, Button, Form, Flex, padding } from "@lenra/app";
 import { collection } from "../../classes/Platform.js";
 import { fields } from "../../classes/PostStat.js";
 import { defaultMenu } from "../components/menu.js";

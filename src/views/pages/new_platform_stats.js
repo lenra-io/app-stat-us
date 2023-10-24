@@ -1,13 +1,13 @@
 'use strict'
 
-import { View } from "@lenra/components";
+import { View } from "@lenra/app";
 
 /**
  * @param {*} _data
  * @param {*} props
  * @returns
  */
-export function content(_data, _props) {
+export function newPlatformStats(_data, _props) {
     return Text("Add platform stats page");
 }
 
@@ -16,7 +16,7 @@ export function content(_data, _props) {
  * @param {*} props
  * @returns
  */
-export function menu(_data, _props) {
+export function newPlatformStatsMenu(_data, _props) {
     return View("menu")
         .props({
             mainAction: {

@@ -1,6 +1,6 @@
 'use strict'
 
-import { Flex, View } from "@lenra/components"
+import { Flex, View } from "@lenra/app"
 
 export default (data, props) => {
   return Flex(

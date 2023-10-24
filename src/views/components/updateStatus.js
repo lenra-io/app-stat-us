@@ -1,4 +1,4 @@
-import { colors, Text, Icon, Flex } from "@lenra/components";
+import { colors, Text, Icon, Flex } from "@lenra/app";
 const { LenraColors } = colors;
 
 const defaultDelay = 7 * 24 * 3600 * 1000; // 7 days

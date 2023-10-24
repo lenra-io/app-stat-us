@@ -1,6 +1,6 @@
 'use strict'
 
-import { View, Flex, Flexible, Button, Text, padding } from "@lenra/components";
+import { View, Flex, Flexible, Button, Text, padding } from "@lenra/app";
 import { collection } from "../../classes/Platform.js";
 import { collection as _collection, types } from "../../classes/Post.js";
 import { collection as __collection } from "../../classes/PostStat.js";

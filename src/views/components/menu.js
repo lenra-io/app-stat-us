@@ -1,4 +1,4 @@
-import { padding, View, Flex, Container, colors, Text } from '@lenra/components';
+import { padding, View, Flex, Container, colors, Text } from '@lenra/app';
 import { collection } from '../../classes/Platform.js';
 import { collection as _collection } from '../../classes/Post.js';
 import { collection as __collection } from '../../services/navigationService.js';

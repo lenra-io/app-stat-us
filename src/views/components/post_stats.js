@@ -1,4 +1,4 @@
-import { padding, colors, Text, Container, Wrap, Flex, Icon } from '@lenra/components';
+import { padding, colors, Text, Container, Wrap, Flex, Icon } from '@lenra/app';
 import { fields as _fields } from '../../classes/PostStat.js';
 
 /**

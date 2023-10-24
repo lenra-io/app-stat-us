@@ -1,4 +1,4 @@
-import { colors, Flex, Flexible, Icon, Text } from "@lenra/components";
+import { colors, Flex, Flexible, Icon, Text } from "@lenra/app";
 
 /**
  * @param {Document[]} docs
