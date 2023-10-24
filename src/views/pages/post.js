@@ -1,9 +1,9 @@
 'use strict'
 
 import { View, Flex, Flexible, Button, Text, padding } from "@lenra/app";
-import { collection } from "../../classes/Platform.js";
-import { collection as _collection, types } from "../../classes/Post.js";
-import { collection as __collection } from "../../classes/PostStat.js";
+import Platform from "../../classes/Platform.js";
+import Post from "../../classes/Post.js";
+import PostStat from "../../classes/PostStat.js";
 import { url } from "../components/url.js";
 
 const pagination = 10;
@@ -13,12 +13,12 @@ const pagination = 10;
  * @param {*} props
  * @returns
  */
-export function content(_data, { state }) {
+export function post(_data, { state }) {
     return Flex(
         Flex(
             Flexible(
                 View("platform_title")
-                    .data(collection, {
+                    .data(Platform, {
                         _id: state.platform
                     })
                     .props({
@@ -38,11 +38,11 @@ export function content(_data, { state }) {
             .spacing(16)
             .crossAxisAlignment("center"),
         View("post_infos")
-            .data(_collection, {
+            .data(Post, {
                 _id: state.post
             }),
         View("post_stats")
-            .data(__collection, {
+            .data(PostStat, {
                 post: state.post,
             })
             .props({
@@ -82,7 +82,7 @@ export function infos([post], props) {
  * @param {*} props
  * @returns
  */
-export function menu(_data, { state }) {
+export function postMenu(_data, { state }) {
     return View("menu")
         .props({
             mainAction: {

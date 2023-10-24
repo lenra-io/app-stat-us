@@ -4,14 +4,32 @@ import Navigation from "./classes/Navigation.js";
 
 // Views
 export const lenra = {
-  routes: [
-    {
-      path: "/",
-      view: View("app")
-        .find(Navigation, {
-          "user": "@me"
-        })
-    }
-  ]
-
+  routes: [{
+    path: "/platform/edit",
+    view: View("EditPlatform")
+      .find(Navigation, {
+        "user": "@me"
+      })
+  },
+  {
+    path: "/platform/edit/form",
+    view: View("EditPlatformForm")
+      .find(Navigation, {
+        "user": "@me"
+      })
+  },
+  {
+    path: "/post/edit",
+    view: View("EditPost")
+      .find(Navigation, {
+        "user": "@me"
+      })
+  },
+  {
+    path: "/post/edit",
+    view: View("EditPostForm")
+      .find(Navigation, {
+        "user": "@me"
+      })
+  }]
 }

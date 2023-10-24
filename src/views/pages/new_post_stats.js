@@ -1,7 +1,7 @@
 'use strict'
 
 import { View, TextField, Button, Form, Flex, padding } from "@lenra/app";
-import { collection } from "../../classes/Platform.js";
+import Platform from "../../classes/Platform.js";
 import { fields } from "../../classes/PostStat.js";
 import { defaultMenu } from "../components/menu.js";
 
@@ -10,9 +10,9 @@ import { defaultMenu } from "../components/menu.js";
  * @param {{state: {platform: string, post: string}}} props
  * @returns
  */
-export function content(_data, props) {
+export function newPostStats(_data, props) {
     return View("new_post_stats_form")
-        .data(collection, {
+        .data(Platform, {
             _id: props.state.platform,
         });
 }

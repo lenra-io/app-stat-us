@@ -1,8 +1,8 @@
 'use strict'
 
 import { View, Form, Flex, TextField, MenuItem, DropdownButton, Menu, Icon, Button, padding } from "@lenra/app";
-import { collection } from "../../classes/Platform.js";
-import { collection as _collection, types } from "../../classes/Post.js";
+import Platform from "../../classes/Platform.js";
+import Post from "../../classes/Post.js";
 import { defaultMenu } from "../components/menu.js";
 import { firstProperty } from "../utils/data.js";
 
@@ -15,7 +15,7 @@ export function editPost(_data, props) {
     const child = View('edit_post_form')
         .props(props);
     if (props.state.post) {
-        child.data(_collection, { _id: props.state.post });
+        child.data(Post, { _id: props.state.post });
     }
     return child;
 }
@@ -34,7 +34,7 @@ export function editPostForm([post], { state }) {
     return Form(
         Flex(
             View("platform_selector")
-                .coll(collection)
+                .coll(Platform)
                 .props({ platform: state.platform || post?.platform }),
             TextField(firstProperty("name", "", state, post))
                 .name("name")

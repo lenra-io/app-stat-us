@@ -1,6 +1,6 @@
 import { Data } from "@lenra/app";
 
-const fields = [
+export const fields = [
     {
         name: "views",
         displayName: "Views",
