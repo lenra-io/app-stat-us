@@ -1,0 +1,38 @@
+componentsApi: "1.0"
+generator:
+  dofigen:
+    builders:
+      - from: "oven/bun"
+        workdir: /app
+        root:
+          script:
+            - chown -R 1000:1000 /app
+        adds:
+          - "package.json"
+          - "bun.lockb"
+        script:
+          - bun install --production
+    from: builder-0
+    root:
+      script:
+        - chmod +r -R /app
+    adds:
+      - .
+    cmd:
+      - bun
+      - node_modules/@lenra/app/dist/bin/app-lenra.js
+      - start
+    envs:
+      NODE_ENV: production
+    ports:
+      - 3000
+    healthcheck:
+      cmd: bun run healthcheck http://localhost:8080/_/health
+      interval: 1s
+      timeout: 1s
+      start: 200ms
+    ignores:
+      - "**"
+      - "!/package.json"
+      - "!/bun.lockb"
+      - "!/src/"

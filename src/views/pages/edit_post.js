@@ -4,7 +4,7 @@ import { View, Form, Flex, TextField, MenuItem, DropdownButton, Menu, Icon, Butt
 import Platform from "../../classes/Platform.js";
 import Post from "../../classes/Post.js";
 import { defaultMenu } from "../components/menu.js";
-import { firstProperty } from "../utils/data.js";
+import { firstProperty } from "../../utils/data.js";
 
 /**
  * @param {*} _data

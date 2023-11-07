@@ -4,7 +4,8 @@ import { fields } from '../classes/PostStat.js';
 import { updateDoc, createDoc, getDoc } from '../services/api.js';
 import { popState, replaceState, updateState } from '../services/navigationService.js';
 import navigationService from '../services/navigationService.js';
-import { urlRegex } from '../views/utils/data.js';
+import { urlRegex } from '../utils/data.js';
+
 const { getNavigation } = navigationService;
 
 export async function updatePlatform(props, event, api) {

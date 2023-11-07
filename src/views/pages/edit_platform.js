@@ -4,7 +4,7 @@ import { View, colors, Flex, TextField, Button, Icon, Flexible, Text, Toggle, pa
 import { collection } from "../../classes/Platform.js";
 import { fields } from "../../classes/PostStat.js";
 import { defaultMenu } from "../components/menu.js";
-import { firstProperty } from "../utils/data.js";
+import { firstProperty } from "../../utils/data.js";
 
 /**
  * @param {*} _data
