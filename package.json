@@ -4,18 +4,22 @@
   "description": "A Lenra app to analyse your stats from your social media posts",
   "main": "index.js",
   "scripts": {
+    "start": "bun node_modules/@lenra/app/dist/bin/app-lenra.js start",
+    "index": "bun node_modules/@lenra/app/dist/bin/app-lenra.js index",
+    "healthcheck": "bun src/healthcheck.ts",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "keywords": [],
   "author": "Lenra",
   "license": "MIT",
   "dependencies": {
-    "@lenra/components": "^1.0.0-beta.3",
-    "axios": "^0.27.1",
-    "express": "^4.18.1",
-    "morgan": "^1.10.0"
+    "@lenra/app": "^1.1.0"
+  },
+  "app-lenra": {
+    "app": "app.ts",
+    "indexer": "ts"
   },
   "devDependencies": {
-    "jest": "^29.4.1"
+    "bun-types": "^1.0.5-canary.20231007T140129"
   }
 }
