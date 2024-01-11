@@ -1,0 +1,21 @@
+allowVolumeExpansion: true
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"allowVolumeExpansion":true,"apiVersion":"storage.k8s.io/v1","kind":"StorageClass","metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"false"},"creationTimestamp":"2022-06-15T14:54:00Z","name":"csi-cinder-high-speed","resourceVersion":"11107457186","uid":"98843f65-7f86-406a-a446-58e633e0d7db"},"parameters":{"availability":"nova","fsType":"ext4","type":"high-speed"},"provisioner":"cinder.csi.openstack.org","reclaimPolicy":"Delete","volumeBindingMode":"Immediate"}
+    storageclass.kubernetes.io/is-default-class: "false"
+  creationTimestamp: "2022-06-15T14:54:00Z"
+  labels:
+    mks.ovh/version: 1.25.12-0
+  name: csi-cinder-high-speed
+  resourceVersion: "21993192334"
+  uid: 98843f65-7f86-406a-a446-58e633e0d7db
+parameters:
+  availability: nova
+  fsType: ext4
+  type: high-speed
+provisioner: cinder.csi.openstack.org
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
