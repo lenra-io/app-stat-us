@@ -23,8 +23,6 @@ export default function (data: PostStat[], props: ViewRequest['props'], context:
     const post_stat = data[0] ?? props.data?.['guards.post_stat']?.[0] as PostStat
     const action = props.action as string ?? 'edit';
 
-    console.log("Action", action, data)
-
     if (user.state?._slug != post_stat?.slug)
         user.state = undefined
 
@@ -120,14 +118,14 @@ export default function (data: PostStat[], props: ViewRequest['props'], context:
                     .onPressed("@lenra:navTo", {
                         path: post ? `/${platform.slug}/${post.slug}` : `/${platform.slug}`
                     }),
-                    Actionable(Container(
+                    post_stat ? Actionable(Container(
                         Flex([Icon("warning"), Text("Delete")]).crossAxisAlignment('center')
                     ).color(0xFFD0342C).borderRadius(borderRadius.all(25)).height(35)
-                    ).onPressed("onPostStatDelete", { _id: post_stat._id }),
+                    ).onPressed("onPostStatDelete", { _id: post_stat?._id }) : null,
                     Button("Save").submit(true).onPressed("@lenra:navTo", {
                         path: post ? `/${platform.slug}/${post.slug}` : `/${platform.slug}`
                     })
-                ]
+                ].filter((value)=>value !== null)
             })
     ).onSubmit(action == 'edit' ? 'onPostStatUpdate' : 'onPostStatCreate', { post_stat, post, stat_endpoint: currentType?.name })
 }

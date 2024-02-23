@@ -46,7 +46,6 @@ function fieldValue(field, stat, previousStat) {
             .semanticLabel(field.displayName),
         Text(isManaged ? `${stat[field.name]}` : '-')
     ];
-    console.log(field, stat, children)
     // Don't seems to be managed yet
     if (previousStat && isManaged && field.name in previousStat) {
         const diff = stat[field.name] - previousStat[field.name];

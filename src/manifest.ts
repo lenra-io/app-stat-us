@@ -204,30 +204,6 @@ const manifest: Manifest = {
                         View('guards.post')
                             .find(Post, {
                                 slug: "@route.post"
-                            }),
-                        View('guards.post_stat')
-                            .find(Post, {
-                                slug: "@route.stat"
-                            })
-                    ]
-                })
-                .context({
-                    'me': true,
-                    'pathParams': true
-                }).toJSON()
-            },
-            {
-                path: "/:platform/:post/edit",
-                view: View('guards.guards').props({
-                    page: View("pages.post_stat_edit"),
-                    guards: [
-                        View('guards.platform')
-                            .find(Platform, {
-                                slug: '@route.platform'
-                            }),
-                        View('guards.post')
-                            .find(Post, {
-                                slug: "@route.post"
                             })
                     ]
                 })
@@ -239,11 +215,10 @@ const manifest: Manifest = {
             {
                 path: "/:platform/:post/:stat/edit",
                 view: View('guards.guards').props({
-                    page: View("pages.post_stat_edit").props({
-                        action: 'edit'
-                    }).find(PostStat, {
-                        slug: '@route.stat'
-                    }),
+                    page: View("pages.post_stat_edit")
+                        .find(PostStat, {
+                            slug: '@route.stat'
+                        }),
                     guards: [
                         View('guards.userIsRegistered')
                             .find(User, {

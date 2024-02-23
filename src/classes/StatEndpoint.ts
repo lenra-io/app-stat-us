@@ -1,5 +1,10 @@
 import { Component, Data, TextField, ListenerHandler, ListenerRequest, Api } from "@lenra/app";
 import { LenraComponent} from "@lenra/app/dist/lib/gen/response";
+import Platform from "./Platform";
+import Post from "./Post";
+import url from "../views/components/url";
+import PostStat from "./PostStat";
+import { slugify } from "../utils/string";
 
 const APP_UUID = process.env.APP_UUID ?? '00000000-0000-0000-0000-000000000000'
 
@@ -45,7 +50,7 @@ export class StatEndpoint extends Data {
         return endpointsTypes;
     }
 
-    async setup(settings: ListenerRequest['event'], api: Api): Promise<string | null> { return null }
+    async setup(post_id: string, settings: ListenerRequest['event'], api: Api): Promise<string | null> { return null }
 }
 
 export class StatEndpointCron extends StatEndpoint {
@@ -65,10 +70,24 @@ export class StatEndpointCron extends StatEndpoint {
 
     constructor(name: string, displayName: string, slug: string, creation_date: number, post: string, cron: string, action: Action, form: Component<LenraComponent>[]) {
         super(name, displayName, slug, creation_date, post, action, form)
+        const currentDate = new Date()
+        const firstCronDate = new Date(currentDate.getTime())
+        firstCronDate.setMinutes(currentDate.getMinutes() + 1)
         this.cron = cron
+            .replace('m', firstCronDate.getMinutes().toString())
+            .replace('h', firstCronDate.getHours().toString())
+            .replace('d', firstCronDate.getDate().toString())
+            .replace('M', firstCronDate.getMonth().toString())
+            .replace('w', firstCronDate.getDay().toString())
     }
 
-    async setup(settings: ListenerRequest['event'], api: Api) {
+    async setup(post_id: string, settings: ListenerRequest['event'], api: Api) {
+        const [post] = await api.data.coll(Post).find({
+            _id: post_id
+        })
+        const [platform] = await api.data.coll(Platform).find({
+            _id: post.platform
+        })
         const cron_response = await fetch(`${api.url}/app-api/v1/crons`, {
             method: 'POST',
             headers: {
@@ -79,7 +98,8 @@ export class StatEndpointCron extends StatEndpoint {
                 listener: 'statsEndpoints',
                 schedule: this.cron,
                 props: {
-                    post: this.post,
+                    post,
+                    platform,
                     settings
                 }
             })
@@ -99,7 +119,13 @@ export class StatEndpointWebhook extends StatEndpoint {
         super(name, displayName, slug, creation_date, post, action, form)
     }
 
-    async setup(settings: ListenerRequest['event'], api: Api) {
+    async setup(post_id: string, settings: ListenerRequest['event'], api: Api) {
+        const [post] = await api.data.coll(Post).find({
+            _id: post_id
+        })
+        const [platform] = await api.data.coll(Platform).find({
+            _id: post.platform
+        })
         const webhook_response = await fetch(new URL('/app-api/v1/webhooks', api.url), {
             method: 'POST',
             headers: {
@@ -109,7 +135,8 @@ export class StatEndpointWebhook extends StatEndpoint {
             body: JSON.stringify({
                 listener: 'statsEndpoints',
                 props: {
-                    post: this.post,
+                    post: post,
+                    platform: platform,
                     settings
                 }
             })
@@ -128,50 +155,52 @@ export class StatEndpointWebhook extends StatEndpoint {
 //     headers: {}
 // }))
 export const endpointsTypes: StatEndpoint[] = [
-    new StatEndpointCron("github", "GitHub", "github", null, null, '0 0 * * *', async (props, _event, Api) => {
-            const { owner, repository, token } = props.settings as {
-                owner: string,
-                repository: string,
-                token: string
-            }
-            const response = await fetch(new URL('https://api.github.com/graphql'), {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, 'X-REQUEST-TYPE': 'GraphQL' },
-                body: `query {
+    new StatEndpointCron("github", "GitHub", "github", null, null, 'm h * * *', async (props, _event, api) => {
+        const { platform, post, settings } = props as {
+            platform: Platform,
+            post: Post,
+            settings: ListenerRequest['event']
+        }
+        const url = new URL(post.url).pathname.split('/')
+        const owner = url[1]
+        const repository = url[2]
+        const release = url[4] == 'tag' ? url[5] : url[4]
+        const response = await fetch(new URL('https://api.github.com/graphql'), {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${settings.token}`, 'X-REQUEST-TYPE': 'GraphQL' },
+            body: `query {
     repository(owner:"${owner}", name:"${repository}") {
-        releases(first:100) {
-            nodes {
-                releaseAssets(first: 100) {
-                    nodes {
-                        name
-                        downloadCount
-                    }
+        release(tagName: ${release}) {
+            releaseAssets(first: 100) {
+                nodes {
+                    name
+                    downloadCount
                 }
             }
         }
     }
 }`
-            } as RequestInit).then(data => data.json())
-        
-        },
-        [
-            TextField('').name('owser').style({
-                decoration: {
-                    labelText: 'Repository Owner/Org'
-                }
-            }),
-            TextField('').name('repository').style({
-                decoration: {
-                    labelText: 'Repository name'
-                }
-            }),
-            TextField('').name('token').style({
-                decoration: {
-                    labelText: 'GitHub Token'
-                }
-            }),
-        ] as Component<LenraComponent>[],
-    ),
+        } as RequestInit).then(data => data.json())
+        const downloadCount = response?.data?.repository?.release?.releaseAssets?.nodes?.reduce((acc, value) => {
+            if (!value.name.includes('docs')) {
+                return acc + value.downloadCount
+            }
+            return acc
+        }, 0)
+        const currentDate = new Date()
+        api.data.coll(PostStat).createDoc({
+            slug: slugify(currentDate.toISOString()),
+            date: currentDate.getTime(),
+            clics: downloadCount
+        } as PostStat)
+    },
+    [
+        TextField('').name('token').style({
+            decoration: {
+                labelText: 'GitHub Token'
+            }
+        }),
+    ] as Component<LenraComponent>[]),
     new StatEndpointCron("cargo", "Cargo", 'cargo', null, null, '0 0 * * *', (props, event, Api) => {
 
         },

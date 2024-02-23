@@ -1,6 +1,5 @@
 import { Api, ListenerRequest } from '@lenra/app';
 import User from '../classes/User';
-import Platform from '../classes/Platform';
 import { dateAndTimeStrToNumber, slugify } from '../utils/string';
 import PostStat from '../classes/PostStat';
 import Post from '../classes/Post';
@@ -11,11 +10,12 @@ export async function onPostStatCreate({ post }: { post: Post }, event: Listener
     const endpoint = StatEndpoint.types.find((endpoint) => endpoint.name == user?.state?.['type'])
     if (endpoint) {
         // TODO: Create endpoint in Lenra (Webhook or Cron)
-        const endpoint_response = await endpoint.setup(event.value as any, api)
-        await api.data.coll(StatEndpoint).createDoc({ ...endpoint, endpoint: endpoint_response, setup: null })
+        const endpointWithId = await api.data.coll(StatEndpoint).createDoc({ ...endpoint, post: post._id, creation_date: Date.now(), endpoint: null, setup: undefined, form: undefined, displayName: undefined, action: undefined })
+        const endpoint_response = await endpoint.setup(post._id, event.value as any, api)
+        await api.data.coll(StatEndpoint).updateMany({ _id: endpointWithId._id }, { $set: { endpoint: endpoint_response } })
     } else {
         const dateTime = dateAndTimeStrToNumber(event.value['date'], event.value['time'])
-        const slug = slugify(dateTime.toString())
+        const slug = slugify(new Date(dateTime).toISOString())
         await api.data.coll(PostStat).createDoc({
             slug,
             post: post._id,
@@ -30,7 +30,7 @@ export async function onPostStatCreate({ post }: { post: Post }, event: Listener
 
 export async function onPostStatUpdate({ postStat, post }: { postStat: PostStat, post: Post }, event: ListenerRequest['event'], api: Api) {
     const dateTime = dateAndTimeStrToNumber(event.value['date'], event.value['time'])
-    const slug = slugify(dateTime.toString())
+    const slug = slugify(new Date(dateTime).toISOString())
     await api.data.coll(PostStat).updateMany({ _id: post._id }, { $set: {
         slug,
         post: post._id,
@@ -44,8 +44,4 @@ export async function onPostStatUpdate({ postStat, post }: { postStat: PostStat,
 
 export async function onPostStatDelete(stat: PostStat, _event: ListenerRequest['event'], api: Api) {
     await api.data.coll(PostStat).deleteDoc(stat)
-}
-
-export function createPostStatEndpoint(props: ListenerRequest['props'], event: ListenerRequest['event'], api: Api) {
-
 }
