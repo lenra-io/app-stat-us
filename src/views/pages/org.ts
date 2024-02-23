@@ -54,11 +54,16 @@ export default function (data: Org[], props: ViewRequest['props'], context: View
                             fontWeight: 'bold'
                         })
                     ),
+                    ...[user.selectedOrg != org._id ? Button("Set current")
+                        .onPressed('updateUser', {
+                            id: '@me',
+                            selectedOrg: org._id
+                        }) : undefined,
                     Button("Invite")
                         .mainStyle("secondary")
                         .onPressed("@lenra:navTo", {
                             path: `/org/${org.slug}/invite`
-                        })
+                        })].filter(value=>value != undefined)
                 ])
                     .spacing(16)
                     .crossAxisAlignment("center"),

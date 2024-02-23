@@ -43,9 +43,8 @@ export async function onOrgUpdateMumbers(props: ListenerRequest['props'], _event
     const { org, member } = props
     const organisation = await api.data.coll(Org).getDoc(org as string)
     const members = organisation.members.filter(m => m.user != (member as Member).user)
-
     await api.data.coll(Org).updateMany({
-        org: org
+        _id: org
     }, {
         $set: {
             members: [...members, member]
@@ -58,11 +57,10 @@ export async function onOrgInviteSearch(props: ListenerRequest['props'], event: 
     const username = event.value as string
     const users = await api.data.coll(User).find({
         username: { $regex: slugify(username) },
-        // id: {
-        //     $nin: (props.org as Org).members.map((value)=>value.user)
-        // }
+        id: {
+            $nin: (props.org as Org).members.map((value)=>value.user)
+        }
     })
-    console.log('Org invite search listener', username, users)
 
     await api.data.coll(User).updateMany({ id: '@me' }, {
         $set: {

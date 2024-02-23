@@ -4,6 +4,7 @@ import { ViewRequest, Container, Text, Flex, TextField, Form, Toggle, padding, I
 import Platform from "../../classes/Platform.js";
 import ViewLayout from '../layout.js';
 import PostStat from "../../classes/PostStat.js";
+import User from "../../classes/User.js";
 
 const pagination = 5;
 
@@ -15,6 +16,8 @@ const pagination = 5;
 export default function (data: Platform[], props: ViewRequest['props'], context: ViewRequest['context']) {
     const platforms = data.length > 0 ? data : props.data?.['guards.platform'] ?? []
     const platform = platforms[0]
+    const user = props.data?.['guards.userIsRegistered']?.[0] as User
+
     const action = props.action as string ?? 'edit';
 
     return Form(
@@ -66,5 +69,5 @@ export default function (data: Platform[], props: ViewRequest['props'], context:
                     })
                 ]
             })
-    ).onSubmit(action == 'edit' ? 'onPlatformUpdate' : 'onPlatformCreate', { platform });
+    ).onSubmit(action == 'edit' ? 'onPlatformUpdate' : 'onPlatformCreate', { platform: { ...platform, org: user.selectedOrg } });
 }

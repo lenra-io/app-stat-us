@@ -94,7 +94,7 @@ const manifest: Manifest = {
                     me: true,
                     pathParams: true
                 }).toJSON()
-            },{
+            }, {
                 path: "/org/:org/invite",
                 view: View('guards.guards').props({
                     page: View("pages.org_invite"),

@@ -37,6 +37,7 @@ export async function createUser(props: ListenerRequest['props'], event: Listene
 
 export async function updateUser(props: ListenerRequest['props'], _event: ListenerRequest['event'], api: Api) {
     const { id, ...userProps } = props
+    console.log('Update user', id, userProps)
     await api.data.coll(User).updateMany({
         id: id
     }, { $set: userProps })

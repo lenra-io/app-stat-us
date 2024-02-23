@@ -45,7 +45,7 @@ export default function (users: User[], props: ListenerRequest['props'], context
                         actions: [
                             Button('')
                                 .leftIcon(Icon("mail").toJSON())
-                                .onPressed('onOrgUpdateMumbers', { org, member })
+                                .onPressed('onOrgUpdateMumbers', { org: org._id, member })
                         ]
                     })
             })

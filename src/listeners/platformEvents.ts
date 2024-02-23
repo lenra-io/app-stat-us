@@ -2,11 +2,12 @@ import { Api, ListenerRequest } from '@lenra/app';
 import Platform from '../classes/Platform';
 import { slugify } from '../utils/string';
 
-export async function onPlatformCreate(_platform: ListenerRequest['props'], event: ListenerRequest['event'], api: Api) {
+export async function onPlatformCreate(props: ListenerRequest['props'], event: ListenerRequest['event'], api: Api) {
     const platform = event.value as Platform
     await api.data.coll(Platform).createDoc({
         ...platform,
-        slug: slugify(platform.name)
+        slug: slugify(platform.name),
+        org: props.org as string
     });
 }
 
