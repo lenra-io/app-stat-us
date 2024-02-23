@@ -77,6 +77,43 @@ const manifest: Manifest = {
                 }).toJSON()
             },
             {
+                path: "/org/:org/edit",
+                view: View('guards.guards').props({
+                    page: View("pages.org_edit"),
+                    guards: [
+                        View("guards.userIsRegistered")
+                            .find(User, {
+                                id: '@me'
+                            }),
+                        View('guards.org')
+                            .find(Org, {
+                                slug: '@route.org'
+                            })
+                    ]
+                }).context({
+                    me: true,
+                    pathParams: true
+                }).toJSON()
+            },{
+                path: "/org/:org/invite",
+                view: View('guards.guards').props({
+                    page: View("pages.org_invite"),
+                    guards: [
+                        View("guards.userIsRegistered")
+                            .find(User, {
+                                id: '@me'
+                            }),
+                        View('guards.org')
+                            .find(Org, {
+                                slug: '@route.org'
+                            })
+                    ]
+                }).context({
+                    me: true,
+                    pathParams: true
+                }).toJSON()
+            },
+            {
                 path: "/:platform",
                 view: View('guards.guards').props({
                     page: View("pages.platform")

@@ -5,7 +5,7 @@ import { capitalize } from "../../utils/string.js";
 
 export default function([user]: User[], {member, backgroundColor = 0xFFAAAAAA, actions = []}: {member: Member, backgroundColor: number, actions: Component<IComponent>[] | IComponent[]}): Component<IComponent> | IComponent {
     return Container.card(Flex([
-        Text(user.username),
+        Text(user.displayName),
         Text(capitalize(Role[member.role])),
         Flex(actions).direction("horizontal").spacing(5)
     ])

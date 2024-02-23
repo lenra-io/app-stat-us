@@ -15,20 +15,20 @@ export default function (_data: ViewRequest['data'], props: ViewRequest['props']
             "fontSize": 24
           })
       ),
-      // View('guards.guards').props({
-      //   page: View('components.org_selector').find(Org, {
-      //     'members.user': '@me'
-      //   }),
-      //   guards: [
-      //     View('guards.find').find(User, {
-      //       id: '@me'
-      //     }).props({
-      //       guardname: 'guards.findUser'
-      //     })
-      //   ]
-      // }).context({
-      //   me: true
-      // }),
+      View('guards.guards').props({
+        page: View('components.org_selector').find(Org, {
+          'members.user': '@me'
+        }),
+        guards: [
+          View('guards.find').find(User, {
+            id: '@me'
+          }).props({
+            guardname: 'guards.findUser'
+          })
+        ]
+      }).context({
+        me: true
+      }),
       Flexible(
         Container()
       ),

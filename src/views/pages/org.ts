@@ -25,6 +25,9 @@ export default function (data: Org[], props: ViewRequest['props'], context: View
     ]
     if (orgUser.role == OrgRole.OWNER) {
         actions = [...actions,
+        Button('Edit').mainStyle('secondary').onPressed('@lenra:navTo', {
+            path: `/org/${org.slug}/edit`
+        }),
         Actionable(
             Container.card(
                 Text("Delete Org")
@@ -37,7 +40,7 @@ export default function (data: Org[], props: ViewRequest['props'], context: View
                 .borderRadius(borderRadius.all(5))
         ).onPressed('deleteOrg', {
             _id: org._id
-        })
+        }),
         ]
     }
 
@@ -54,7 +57,7 @@ export default function (data: Org[], props: ViewRequest['props'], context: View
                     Button("Invite")
                         .mainStyle("secondary")
                         .onPressed("@lenra:navTo", {
-                            path: `/org/${org.slug}/edit`
+                            path: `/org/${org.slug}/invite`
                         })
                 ])
                     .spacing(16)
@@ -100,7 +103,7 @@ export default function (data: Org[], props: ViewRequest['props'], context: View
                     }
                     if (orgUser.role >= OrgRole.ADMIN && orgUser.role-1 > member.role) {
                         actions = [...actions,
-                            Button('Promote').onPressed('updateMember', {
+                            Button('Promote').onPressed('onOrgUpdateMumbers', {
                                 org: org._id,
                                 member: {
                                     ...member,
@@ -111,7 +114,7 @@ export default function (data: Org[], props: ViewRequest['props'], context: View
                     }
                     if (orgUser.role >= OrgRole.ADMIN && member.role > OrgRole.VIEWER && orgUser.role-1 > member.role) {
                         actions = [...actions,
-                            Button('Demote').onPressed('updateMember', {
+                            Button('Demote').onPressed('onOrgUpdateMumbers', {
                                 org: org._id,
                                 member: {
                                     ...member,

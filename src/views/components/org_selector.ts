@@ -15,7 +15,7 @@ export default function (data: ViewRequest['data'], props: ViewRequest['props'],
           MenuItem(o.name)
               .isSelected(o._id == user.selectedOrg)
           .onPressed('updateUser', {
-            _id: '@me',
+            id: '@me',
             selectedOrg: o._id
           })
         ),
@@ -24,6 +24,9 @@ export default function (data: ViewRequest['data'], props: ViewRequest['props'],
             path: `/org/new`
           })
       ])),
+    Button('').mainStyle("secondary").leftIcon(Icon('add').toJSON()).onPressed('@lenra:navTo', {
+      path: `/org/new`
+    }),
     Button('').mainStyle("secondary").leftIcon(Icon('settings').toJSON()).onPressed('@lenra:navTo', {
       path: `/org/${org.slug}`
     })

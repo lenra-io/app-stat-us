@@ -2,7 +2,6 @@ import { Component, Data, TextField, ListenerHandler, ListenerRequest, Api } fro
 import { LenraComponent} from "@lenra/app/dist/lib/gen/response";
 import Platform from "./Platform";
 import Post from "./Post";
-import url from "../views/components/url";
 import PostStat from "./PostStat";
 import { slugify } from "../utils/string";
 
@@ -72,7 +71,7 @@ export class StatEndpointCron extends StatEndpoint {
         super(name, displayName, slug, creation_date, post, action, form)
         const currentDate = new Date()
         const firstCronDate = new Date(currentDate.getTime())
-        firstCronDate.setMinutes(currentDate.getMinutes() + 1)
+        firstCronDate.setHours(currentDate.getHours() + 1, currentDate.getMinutes() + 2)
         this.cron = cron
             .replace('m', firstCronDate.getMinutes().toString())
             .replace('h', firstCronDate.getHours().toString())
