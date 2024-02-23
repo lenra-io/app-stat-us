@@ -13,29 +13,11 @@ const pagination = 5;
  * @returns
  */
 export function platform(data: ViewRequest['data'], props: ViewRequest['props'], context: ViewRequest['context']) {
-    const platforms = data.length > 0 ? data : props.data?.['guards.platform'] ?? []
+    const users = props.data?.['guards.userIsRegistered'] ?? []
+    const user = users[0]
+    const platforms = data.length as number > 0 ? data : props.data?.['guards.platform'] ?? []
     const platform = platforms[0]
-    // If platform didn't exist
-    if (!platform) {
-        return ViewLayout(Flex([
-            Container(
-                Text('Error 404: Platform not found.')
-                    .style({
-                        fontSize: 32
-                    })
-            )
-        ]).direction('vertical').crossAxisAlignment("center"), {
-            actions: [
-                Button("Back")
-                    .mainStyle("secondary")
-                    .onPressed("@lenra:navTo", {
-                        path: `/`
-                    })
-            ]
-        })
-    }
 
-    // Else show platform page
     return ViewLayout(Container(Flex([
         Flex([
             Flexible(
@@ -69,8 +51,8 @@ export function platform(data: ViewRequest['data'], props: ViewRequest['props'],
                 // add: true,
                 limit: props.limit,
                 pagination: props.pagination,
-                platform: platform._id,
-                platformSlug: platform.slug
+                platform: platform,
+                user: user
             })
         ])
         .spacing(16)
@@ -80,6 +62,11 @@ export function platform(data: ViewRequest['data'], props: ViewRequest['props'],
     ).maxWidth(900),
 {
         actions: [
+            Button("Back")
+            .mainStyle("secondary")
+            .onPressed("@lenra:navTo", {
+                path: `/`
+            }),
             Button("New post").onPressed("@lenra:navTo", {
                 path: `/${platform.slug}/new`
             })

@@ -49,6 +49,7 @@ export const fields: Field[] = [
 
 export default class PostStat extends Data {
     /**
+     * @param {string} slug The stat slug in URL
      * @param {string} post The post id
      * @param {number} date The date of the stat recording
      * @param {number} views The number of views
@@ -58,6 +59,7 @@ export default class PostStat extends Data {
      * @param {number} clics The number clics on a link in the posts
      * @param {number} visits The number visitis of the profile from a given post
      */
+    slug: string;
     post: string;
     date: number;
     views: number;
@@ -67,8 +69,9 @@ export default class PostStat extends Data {
     clics: number;
     visits: number;
 
-    constructor(post: string, date: number, views: number, reposts: number, likes: number, comments: number, clics: number, visits: number) {
+    constructor(slug: string, post: string, date: number, views: number, reposts: number, likes: number, comments: number, clics: number, visits: number) {
         super();
+        this.slug = slug;
         this.post = post;
         this.date = date;
         this.views = views;

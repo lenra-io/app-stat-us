@@ -1,0 +1,19 @@
+POST https://api.github.com/graphql
+Content-Type: application/json
+Authorization: Bearer {{gh_personnal_token}}
+X-REQUEST-TYPE: GraphQL
+
+query {
+  repository(owner:"lenra-io", name:"lenra_cli") {
+    releases(first:100) {
+      nodes {
+        releaseAssets(first: 100) {
+          nodes {
+            name
+            downloadCount
+          }
+        }
+      }
+    }
+  }
+}

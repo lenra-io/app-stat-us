@@ -1,77 +1,126 @@
 import { Manifest, View } from '@lenra/app';
 import Platform from './classes/Platform.js';
 import Post from './classes/Post.js';
-import guards from './views/guards/guards.js';
-import FormState from './classes/FormState.js';
 import User from './classes/User.js';
+import PostStat from './classes/PostStat.js';
+import Org from './classes/Org.js';
 
 const manifest: Manifest = {
     lenra: {
         routes: [
             {
                 path: "/",
-                view: guards([], {
+                view: View('guards.guards').props({
                     page: View("pages.home"),
                     guards: [
-                        View("guards.currentUser")
+                        View("guards.userIsRegistered")
                             .find(User, { id: '@me' })
                     ]
+                }).context({
+                    me: true,
+                    pathParams: true
                 }).toJSON()
             },
             {
                 path: "/new",
-                view: guards([], {
+                view: View('guards.guards').props({
                     page: View("pages.platform_edit")
                             .props({
                                 action: 'new'
                             }),
                     guards: [
-                        View("guards.currentUser")
+                        View("guards.userIsRegistered")
                             .find(User, {
                                 id: '@me'
                             })
                     ]
+                }).context({
+                    me: true,
+                    pathParams: true
+                }).toJSON()
+            },
+            {
+                path: "/org/new",
+                view: View('guards.guards').props({
+                    page: View("pages.org_edit")
+                            .props({
+                                action: 'new'
+                            }),
+                    guards: [
+                        View("guards.userIsRegistered")
+                            .find(User, {
+                                id: '@me'
+                            })
+                    ]
+                }).context({
+                    me: true,
+                    pathParams: true
+                }).toJSON()
+            },
+            {
+                path: "/org/:org",
+                view: View('guards.guards').props({
+                    page: View("pages.org"),
+                    guards: [
+                        View("guards.userIsRegistered")
+                            .find(User, {
+                                id: '@me'
+                            }),
+                        View('guards.org')
+                            .find(Org, {
+                                slug: '@route.org'
+                            })
+                    ]
+                }).context({
+                    me: true,
+                    pathParams: true
                 }).toJSON()
             },
             {
                 path: "/:platform",
-                view: guards([], {
+                view: View('guards.guards').props({
                     page: View("pages.platform")
                             .props({
                                 limit: 10,
                                 pagination: 1
                             }),
                     guards: [
-                        View("guards.currentUser")
+                        View("guards.userIsRegistered")
                             .find(User, {
                                 id: '@me'
                             }),
                         View('guards.platform')
                             .find(Platform, {
-                                slug: 'twitch'
+                                slug: '@route.platform'
                             })
                     ]
+                }).context({
+                    me: true,
+                    pathParams: true
                 }).toJSON()
             },
             {
                 path: "/:platform/edit",
-                view: guards([], {
+                view: View('guards.guards').props({
                     page: View("pages.platform_edit"),
                     guards: [
-                        View("guards.currentUser")
+                        View("guards.userIsRegistered")
                             .find(User, {
                                 id: '@me'
                             }),
                         View('guards.platform')
                             .find(Platform, {
-                                slug: "twitch"
+                                slug: "@route.platform"
                             })
                     ]
+                }).context({
+                    me: true,
+                    pathParams: true
                 }).toJSON()
             },
             {
                 path: "/:platform/new",
-                view: guards([], {
+                view: View('guards.guards').props({
                     page: View('pages.post_edit')
                         .props({
                             action: 'new'
@@ -81,61 +130,142 @@ const manifest: Manifest = {
                             'pathParams': true
                         }),
                     guards: [
-                        View("guards.currentUser")
+                        View("guards.userIsRegistered")
                             .find(User, {
                                 id: '@me'
                             }),
                         View('guards.platform')
                             .find(Platform, {
-                                slug: "twitch"
-                            }),
-                        View('guards.formState')
-                            .find(FormState, {
-                                user: '@me'
+                                slug: "@route.platform"
                             })
                     ]
+                }).context({
+                    me: true,
+                    pathParams: true
                 }).toJSON()
             },
             {
                 path: "/:platform/:post",
-                view: View("pages.post")
-                    .find(Post, {
-                    slug: "@route.post"
-                    })
-                    .props({
-                        limit: 10,
-                        pagination: 1
-                    })
-                    .context({
-                        'me': true,
-                        'pathParams': true
-                    }).toJSON()
-            },
-            {
-                path: "/:platform/:post/edit",
-                view: guards([], {
-                    page: View('pages.post_edit')
-                        .props({
-                            action: 'new'
-                        })
-                        .context({
-                            'me': true,
-                            'pathParams': true
-                        }),
+                view: View('guards.guards').props({
+                    page: View("pages.post"),
                     guards: [
                         View('guards.platform')
                             .find(Platform, {
-                                slug: "twitch"
+                                slug: '@route.platform'
+                            }),
+                        View('guards.post')
+                            .find(Post, {
+                                slug: "@route.post"
+                            })
+                    ]
+                })
+                .context({
+                    'me': true,
+                    'pathParams': true
+                }).toJSON()
+            },
+            {
+                path: "/:platform/:post/edit",
+                view: View('guards.guards').props({
+                    page: View('pages.post_edit'),
+                    guards: [
+                        View('guards.userIsRegistered').find(User, {
+                            id: '@me'
+                        }),
+                        View('guards.platform')
+                            .find(Platform, {
+                                slug: "@route.platform"
+                            }),
+                        View('guards.post')
+                            .find(Post, {
+                                slug: "@route.post"
+                            })
+                    ]
+                }).context({
+                    me: true,
+                    pathParams: true
+                }).toJSON()
+            },
+            {
+                path: "/:platform/:post/new",
+                view: View('guards.guards').props({
+                    page: View("pages.post_stat_edit").props({
+                        action: 'new'
+                    }),
+                    guards: [
+                        View('guards.userIsRegistered')
+                            .find(User, {
+                                id: '@me'
+                            }),
+                        View('guards.platform')
+                            .find(Platform, {
+                                slug: '@route.platform'
                             }),
                         View('guards.post')
                             .find(Post, {
                                 slug: "@route.post"
                             }),
-                        View('guards.formState')
-                            .find(FormState, {
-                                user: '@me'
+                        View('guards.post_stat')
+                            .find(Post, {
+                                slug: "@route.stat"
                             })
                     ]
+                })
+                .context({
+                    'me': true,
+                    'pathParams': true
+                }).toJSON()
+            },
+            {
+                path: "/:platform/:post/edit",
+                view: View('guards.guards').props({
+                    page: View("pages.post_stat_edit"),
+                    guards: [
+                        View('guards.platform')
+                            .find(Platform, {
+                                slug: '@route.platform'
+                            }),
+                        View('guards.post')
+                            .find(Post, {
+                                slug: "@route.post"
+                            })
+                    ]
+                })
+                .context({
+                    'me': true,
+                    'pathParams': true
+                }).toJSON()
+            },
+            {
+                path: "/:platform/:post/:stat/edit",
+                view: View('guards.guards').props({
+                    page: View("pages.post_stat_edit").props({
+                        action: 'edit'
+                    }).find(PostStat, {
+                        slug: '@route.stat'
+                    }),
+                    guards: [
+                        View('guards.userIsRegistered')
+                            .find(User, {
+                                id: '@me'
+                            }),
+                        View('guards.platform')
+                            .find(Platform, {
+                                slug: '@route.platform'
+                            }),
+                        View('guards.post')
+                            .find(Post, {
+                                slug: "@route.post"
+                            }),
+                        View('guards.post_stat')
+                            .find(PostStat, {
+                                slug: "@route.stat"
+                            })
+                    ]
+                })
+                .context({
+                    'me': true,
+                    'pathParams': true
                 }).toJSON()
             }
         ]

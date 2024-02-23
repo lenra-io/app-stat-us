@@ -1,6 +1,9 @@
-import { ViewRequest, Container, Flex, colors, padding, Image, Flexible, Text, Component, IComponent, Button } from '@lenra/app'
+import { ViewRequest, Container, Flex, colors, padding, Image, Flexible, Text, Component, IComponent, Button, View } from '@lenra/app'
+import Org from '../../classes/Org'
+import guards from '../guards/guards'
+import User from '../../classes/User'
 
-export default function (_data: ViewRequest['data'], props: ViewRequest['props']): Component<IComponent> | IComponent {
+export default function (_data: ViewRequest['data'], props: ViewRequest['props'], ): Component<IComponent> | IComponent {
   const actions = props.actions ?? []
 
   return Container(
@@ -12,6 +15,20 @@ export default function (_data: ViewRequest['data'], props: ViewRequest['props']
             "fontSize": 24
           })
       ),
+      // View('guards.guards').props({
+      //   page: View('components.org_selector').find(Org, {
+      //     'members.user': '@me'
+      //   }),
+      //   guards: [
+      //     View('guards.find').find(User, {
+      //       id: '@me'
+      //     }).props({
+      //       guardname: 'guards.findUser'
+      //     })
+      //   ]
+      // }).context({
+      //   me: true
+      // }),
       Flexible(
         Container()
       ),
@@ -21,6 +38,7 @@ export default function (_data: ViewRequest['data'], props: ViewRequest['props']
       .mainAxisAlignment("spaceBetween")
       .crossAxisAlignment("center")
       .padding({ right: 32 })
+      .spacing(10)
   )
     .color(colors.Colors.white)
     .boxShadow({

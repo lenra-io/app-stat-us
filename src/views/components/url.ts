@@ -9,12 +9,10 @@ export default function([doc], props) {
     return Flex([
         Icon("link").size(16),
         Flexible(
-
-                Text(doc.url)
-                    .style({
-                        color: colors.LenraColors.bluePulse,
-                    })
-
+            Text(doc.url)
+                .style({
+                    color: colors.LenraColors.bluePulse,
+                })
         )
     ])
         .spacing(8)

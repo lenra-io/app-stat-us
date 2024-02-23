@@ -1,0 +1,25 @@
+{
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "plex.lan",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "plex.lan",
+      "database": "evntboard",
+      "username": "tilican",
+      "password": "1234"
+    },
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "local",
+      "group": "Lenra",
+      "database": "lenra_devtool",
+      "username": "postgres",
+      "password": "postgres"
+    }
+  ]
+}

@@ -1,18 +1,24 @@
 'use strict'
 
-import { ViewRequest, Container, Text, Flex, TextField, Form, Toggle, padding, Icon, Flexible, Button } from "@lenra/app";
+import { ViewRequest, Container, Text, Flex, Button } from "@lenra/app";
 import ViewLayout from '../layout.js';
 import guards from "./guards"
-import Post from "../../classes/Post.js";
+import Org from "../../classes/Org.js";
 
 export default (data: ViewRequest['data'], props: ViewRequest['props'], context: ViewRequest['context']) => {
-    const [post] = data as unknown as Post[]
-    const platform = props.data?.['guards.platform']?.[0]
+    const [org] = data as unknown as Org[]
+    const user = props.data?.['guards.userIsRegistered']?.[0]
 
-    if (!post) {
+    let hasAccess = true
+    if (user) {
+        hasAccess = false
+        hasAccess = org.members.some(member=>member.user == user.id)
+    }
+
+    if (!org) {
         return ViewLayout(Flex([
             Container(
-                Text('Error 404: Post not found...')
+                Text('Error 404: Organisation not found...')
                     .style({
                         fontSize: 32
                     })
@@ -22,10 +28,10 @@ export default (data: ViewRequest['data'], props: ViewRequest['props'], context:
                 Button("Back")
                     .mainStyle("secondary")
                     .onPressed("@lenra:navTo", {
-                        path: platform.slug ? `/${platform.slug}` : '/'
+                        path: `/`
                     })
             ]
         })
     }
-    return guards(data, { guardname: 'guards.post', ...props }, context)
+    return guards(data, { guardname: 'guards.org', ...props }, context)
 }

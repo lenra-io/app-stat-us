@@ -13,12 +13,14 @@ const pagination = 5;
  * @param {*} props
  * @returns
  */
-export function post([post]: ViewRequest['data'], props: ViewRequest['props'], context: ViewRequest['context']) {
+export function post(data: Post[], props: ViewRequest['props'], context: ViewRequest['context']) {
+    const platform = props.data?.['guards.platform']?.[0] as Platform
+    const post = data[0] ?? props.data?.['guards.post']?.[0] as Post
 
     return ViewLayout(Flex([
             Flex([
                 Flexible(
-                    View("platform_title")
+                    View("components.platform_title")
                         .find(Platform, {
                             _id: post.platform
                         })
@@ -30,21 +32,22 @@ export function post([post]: ViewRequest['data'], props: ViewRequest['props'], c
                 ),
                 Button("Edit")
                     .mainStyle("secondary")
-                    .onPressed("pushState", {
-                        page: "edit_post",
-                        post: post._id,
-                        platform: post.platform
+                    .onPressed("@lenra:navTo", {
+                        path: `/${platform.slug}/${post.slug}/edit`
                     })
                 ])
                 .spacing(16)
                 .crossAxisAlignment("center"),
-            View("post_infos")
-                .find(Post, {
-                    _id: post._id
-                }),
-            View("post_stats")
+            // View("components.post_infos")
+            //     .find(Post, {
+            //         _id: post._id
+            //     }),
+            View("components.post_stats")
                 .find(PostStat, {
                     post: post._id,
+                }).props({
+                    post,
+                    platform
                 })
         ])
             .spacing(32)
@@ -53,8 +56,13 @@ export function post([post]: ViewRequest['data'], props: ViewRequest['props'], c
             .direction("vertical"),
 {
         actions: [
-            Button("New post").onPressed("@lenra:navTo", {
-                path: `/${props.platform}/new_post`
+            Button("Back")
+            .mainStyle("secondary")
+            .onPressed("@lenra:navTo", {
+                path: platform ? `/${platform.slug}` : `/`
+            }),
+            Button("Add Stat").onPressed("@lenra:navTo", {
+                path: `/${platform.slug}/${post.slug}/new`
             })
         ]
     });

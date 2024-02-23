@@ -1,11 +1,9 @@
 import { Api, ListenerRequest } from '@lenra/app';
-import Platform from '../classes/Platform';
-import FormState from '../classes/FormState';
 import User from '../classes/User';
 import { default as Org, Role as OrgRoles} from '../classes/Org';
+import { slugify } from '../utils/string';
 
 export default async function (props: ListenerRequest['props'], event: ListenerRequest['event'], api: Api) {
-    console.log(event)
     const username = event.value['username'] as string
     const id = props.user as string
     const existingUser = await api.data.coll(User).find({
@@ -25,7 +23,7 @@ export default async function (props: ListenerRequest['props'], event: ListenerR
     }
 
     const org = await api.data.coll(Org)
-    .createDoc(new Org(username, [{user: id, role: OrgRoles.OWNER}]))
+    .createDoc(new Org(username, slugify(username), [{user: id, role: OrgRoles.OWNER}]))
 
     await api.data.coll(User)
         .createDoc(new User(
