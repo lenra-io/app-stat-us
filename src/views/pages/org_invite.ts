@@ -30,7 +30,7 @@ export default function (users: User[], props: ListenerRequest['props'], context
                     labelText: 'Search by name'
                 }
             }).onChanged("onOrgInviteSearch", { org }),
-            ...user.state?.users?.map((user, i) => {
+            ...(user.state?.users?.map((user, i) => {
                 const member = {
                     role: Role.VIEWER,
                     user: user
@@ -48,7 +48,7 @@ export default function (users: User[], props: ListenerRequest['props'], context
                                 .onPressed('onOrgUpdateMumbers', { org: org._id, member })
                         ]
                     })
-            })
+            }) ?? [])
         ])
             .spacing(16)
             .padding(padding.all(32))
