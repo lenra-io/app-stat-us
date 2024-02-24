@@ -10,7 +10,7 @@ export default function (data: ViewRequest['data'], props: ViewRequest['props'],
     return Container()
 
   return Flex([
-    DropdownButton(org.name ?? 'Select an org', Menu(
+    DropdownButton(org?.name ?? 'Select an org', Menu(
       [...orgs.filter(o=>o._id != org._id).map(o =>
           MenuItem(o.name)
               .isSelected(o._id == user.selectedOrg)
