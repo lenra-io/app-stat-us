@@ -2,14 +2,17 @@ import { ViewRequest, Component, Flex, IComponent, View, Container, padding, But
 import Post from "../../classes/Post.js";
 import Platform from "../../classes/Platform.js";
 import ViewLayout from '../layout.js';
+import User from "../../classes/User.js";
 
 export default function (_data: ViewRequest['data'], props: ViewRequest['props']): Component<IComponent> | IComponent {
+    const user = props.data?.['guards.userIsRegistered']?.[0] as User
+
     return ViewLayout(Flex([
         View("components.platform_list")
-            .find(Platform, {}, { _id: true, name: true}),
+            .find(Platform, { org: user.selectedOrg }, { _id: true, name: true}),
         Container(
             View("components.post_list")
-                .find(Post, {})
+                .find(Post, { org: user.selectedOrg })
                 .props({
                     limit: props.limit,
                     page: props.page

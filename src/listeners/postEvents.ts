@@ -9,6 +9,7 @@ export async function onPostCreate({post, platform}: {post: Post, platform: Plat
     const slug = slugify(event.value['name'])
     const dateTime = dateAndTimeStrToNumber(event.value['date'], event.value['time'])
     await api.data.coll(Post).createDoc(new Post(
+        user.selectedOrg,
         platform._id,
         event.value['name'],
         slug,
