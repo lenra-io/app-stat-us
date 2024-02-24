@@ -1,20 +1,20 @@
 'use strict'
 
-import { ViewRequest, Container, Text, Flex, TextField, Form, Toggle, padding, Icon, Flexible, Button } from "@lenra/app";
+import { ViewRequest, Container, Text, Flex, Button } from "@lenra/app";
 import ViewLayout from '../layout.js';
 import guards from "./guards"
-import Platform from "../../classes/Platform.js";
 import Org from "../../classes/Org.js";
+import User from "../../classes/User.js";
 
 export default (data: ViewRequest['data'], props: ViewRequest['props'], context: ViewRequest['context']) => {
-    const org = props?.data?.['guards.currentOrg']?.[0] as Org
-    const platforms = (data as unknown as Platform[]).filter(platform => platform.org == org._id)
-    const [platform] = platforms
+    const user = props.data?.['guards.userIsRegistered']?.[0] as User
+    const orgs = data as unknown as Org[]
+    const [org] = orgs.filter(org=>org._id == user.selectedOrg)
 
-    if (!platform) {
+    if (!org) {
         return ViewLayout(Flex([
             Container(
-                Text('Error 404: Platform not found...')
+                Text('Error 404: Organisation not found...')
                     .style({
                         fontSize: 32
                     })
@@ -29,5 +29,5 @@ export default (data: ViewRequest['data'], props: ViewRequest['props'], context:
             ]
         })
     }
-    return guards(platforms as any, { guardname: 'guards.platform', ...props }, context)
+    return guards([org] as any, { guardname: 'guards.org', ...props }, context)
 }

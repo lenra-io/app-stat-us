@@ -69,5 +69,5 @@ export default function (data: Platform[], props: ViewRequest['props'], context:
                     })
                 ]
             })
-    ).onSubmit(action == 'edit' ? 'onPlatformUpdate' : 'onPlatformCreate', { platform: { ...platform, org: user.selectedOrg } });
+    ).onSubmit(action == 'edit' ? 'onPlatformUpdate' : 'onPlatformCreate', { platform, org: user.selectedOrg });
 }

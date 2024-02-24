@@ -14,7 +14,9 @@ const manifest: Manifest = {
                     page: View("pages.home"),
                     guards: [
                         View("guards.userIsRegistered")
-                            .find(User, { id: '@me' })
+                            .find(User, { id: '@me' }),
+                        View("guards.currentOrg")
+                            .find(Org, {})
                     ]
                 }).context({
                     me: true,
@@ -32,7 +34,9 @@ const manifest: Manifest = {
                         View("guards.userIsRegistered")
                             .find(User, {
                                 id: '@me'
-                            })
+                            }),
+                        View("guards.currentOrg")
+                            .find(Org, {})
                     ]
                 }).context({
                     me: true,

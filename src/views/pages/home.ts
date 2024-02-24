@@ -3,9 +3,11 @@ import Post from "../../classes/Post.js";
 import Platform from "../../classes/Platform.js";
 import ViewLayout from '../layout.js';
 import User from "../../classes/User.js";
+import Org from "../../classes/Org.js";
 
 export default function (_data: ViewRequest['data'], props: ViewRequest['props']): Component<IComponent> | IComponent {
     const user = props.data?.['guards.userIsRegistered']?.[0] as User
+    const org = props.data?.['guards.currentOrg']?.[0] as Org
 
     return ViewLayout(Flex([
         View("components.platform_list")
